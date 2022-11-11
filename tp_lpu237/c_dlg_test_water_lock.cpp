@@ -26,6 +26,11 @@ void c_dlg_test_water_lock::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_STATIC_WATER_LOCK_STATE, m_static_state);
 	DDX_Control(pDX, IDC_STATIC_SERIAL_NUMBER, m_static_serial_number);
+	DDX_Control(pDX, IDC_COMBO_IBUTTON_TYPE, m_combo_ibutton_type);
+	DDX_Control(pDX, IDC_EDIT_START_SENTINEL, m_edit_start_sentinel);
+	DDX_Control(pDX, IDC_EDIT_END_SENTINEL, m_edit_stop_sentinel);
+	DDX_Control(pDX, IDC_EDIT_PORT_TYPE, m_edit_port_type);
+	DDX_Control(pDX, IDC_EDIT_INTERFACE_PORT, m_edit_interface_port);
 }
 
 

@@ -23,6 +23,5 @@ protected:
 public:
 	CEdit m_edit_iso1_start_sentinel[3];
 	CEdit m_edit_iso1_end_sentinel[3];
-	afx_msg void OnBnClickedButtonApply();
-	afx_msg void OnBnClickedButtonRestoreDefault();
+	CButton m_check_enable_iso[3];
 };

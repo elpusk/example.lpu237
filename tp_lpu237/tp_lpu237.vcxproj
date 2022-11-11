@@ -100,6 +100,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="c_dlg_msr_config.h" />
     <ClInclude Include="c_dlg_msr_sentinel.h" />
     <ClInclude Include="c_dlg_msr_test.h" />
     <ClInclude Include="c_dlg_test_water_lock.h" />
@@ -114,6 +115,7 @@
     <ClInclude Include="tp_lpu237Dlg.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="c_dlg_msr_config.cpp" />
     <ClCompile Include="c_dlg_msr_sentinel.cpp" />
     <ClCompile Include="c_dlg_msr_test.cpp" />
     <ClCompile Include="c_dlg_test_water_lock.cpp" />

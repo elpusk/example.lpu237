@@ -30,6 +30,8 @@ void c_tab_msr::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(c_tab_msr, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_MSR_CONFIG, &c_tab_msr::OnBnClickedButtonMsrConfig)
 	ON_BN_CLICKED(IDC_BUTTON_MSR_SENTINELS, &c_tab_msr::OnBnClickedButtonMsrSentinels)
+	ON_BN_CLICKED(IDC_BUTTON_APPLY, &c_tab_msr::OnBnClickedButtonApply)
+	ON_BN_CLICKED(IDC_BUTTON_RESTORE_DEFAULT, &c_tab_msr::OnBnClickedButtonRestoreDefault)
 END_MESSAGE_MAP()
 
 
@@ -38,7 +40,9 @@ END_MESSAGE_MAP()
 
 void c_tab_msr::OnBnClickedButtonMsrConfig()
 {
-	// TODO: Add your control notification handler code here
+	c_dlg_msr_config dlg;
+
+	dlg.DoModal();
 }
 
 
@@ -47,4 +51,16 @@ void c_tab_msr::OnBnClickedButtonMsrSentinels()
 	c_dlg_msr_sentinel dlg;
 
 	dlg.DoModal();
+}
+
+
+void c_tab_msr::OnBnClickedButtonApply()
+{
+	// TODO: Add your control notification handler code here
+}
+
+
+void c_tab_msr::OnBnClickedButtonRestoreDefault()
+{
+	// TODO: Add your control notification handler code here
 }

@@ -23,4 +23,9 @@ protected:
 public:
 	CStatic m_static_state;
 	CStatic m_static_serial_number;
+	CComboBox m_combo_ibutton_type;
+	CEdit m_edit_start_sentinel;
+	CEdit m_edit_stop_sentinel;
+	CEdit m_edit_port_type;
+	CEdit m_edit_interface_port;
 };

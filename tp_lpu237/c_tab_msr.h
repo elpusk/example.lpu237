@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 
+#include "c_dlg_msr_config.h"
 #include "c_dlg_msr_sentinel.h"
 
 // c_tab_msr dialog
@@ -28,4 +29,6 @@ protected:
 public:
 	afx_msg void OnBnClickedButtonMsrConfig();
 	afx_msg void OnBnClickedButtonMsrSentinels();
+	afx_msg void OnBnClickedButtonApply();
+	afx_msg void OnBnClickedButtonRestoreDefault();
 };
