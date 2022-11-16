@@ -11,6 +11,7 @@
 #define IDD_DIALOG_MSR_SUB_SENTINELS    138
 #define IDD_DIALOG_TEST_SUB_WATER_LOCK  140
 #define IDD_DIALOG_MSR_SUB_CONFIG       142
+#define IDD_DIALOG_PROGRESS             144
 #define IDC_TAB_MAIN                    1000
 #define IDC_BUTTON_OPOS_MSR             1001
 #define IDC_BUTTON_MSR_CONFIG           1002
@@ -37,17 +38,18 @@
 #define IDC_COMBO_KEYBOARD_LANGUAGE     1018
 #define IDC_EDIT_START_SENTINEL         1018
 #define IDC_EDIT_END_SENTINEL           1019
+#define IDC_PROGRESS1                   1019
+#define IDC_PROGRESS_PROCESS            1019
 #define IDC_EDIT_PORT_TYPE              1020
-#define IDC_EDIT_PORT_TYPE2             1021
 #define IDC_EDIT_INTERFACE_PORT         1021
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        144
+#define _APS_NEXT_RESOURCE_VALUE        146
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1019
+#define _APS_NEXT_CONTROL_VALUE         1020
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

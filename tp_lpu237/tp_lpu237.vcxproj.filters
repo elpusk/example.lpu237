@@ -14,7 +14,7 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="lpu237">
-      <UniqueIdentifier>{bd699397-cf28-4cbe-97a1-d9b3e8e796b7}</UniqueIdentifier>
+      <UniqueIdentifier>{eb21e0b2-61dd-45fe-a387-2f1b490e9335}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +57,21 @@
     <ClInclude Include="c_dlg_msr_config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\third\project\third.project.tg_lpu237\tg_lpu237_tools\cdll_lpu237_tools.h">
+      <Filter>lpu237</Filter>
+    </ClInclude>
+    <ClInclude Include="_exm.h">
+      <Filter>lpu237</Filter>
+    </ClInclude>
+    <ClInclude Include="_exm_mgmt_lpu237.h">
+      <Filter>lpu237</Filter>
+    </ClInclude>
+    <ClInclude Include="cprogress.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KBConst.h">
+      <Filter>lpu237</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tp_lpu237.cpp">
@@ -87,6 +102,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="c_dlg_msr_config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cprogress.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

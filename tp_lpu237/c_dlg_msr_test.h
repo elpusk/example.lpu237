@@ -22,4 +22,5 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	CListBox m_listbox_info;
+	virtual BOOL OnInitDialog();
 };

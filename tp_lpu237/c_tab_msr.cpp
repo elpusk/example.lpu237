@@ -6,7 +6,7 @@
 #include "c_tab_msr.h"
 #include "afxdialogex.h"
 
-
+#include "cprogress.h"
 // c_tab_msr dialog
 
 IMPLEMENT_DYNAMIC(c_tab_msr, CDialogEx)
@@ -56,7 +56,16 @@ void c_tab_msr::OnBnClickedButtonMsrSentinels()
 
 void c_tab_msr::OnBnClickedButtonApply()
 {
-	// TODO: Add your control notification handler code here
+	_exam::cmgmt_lpu237& mgmt(_exam::cmgmt_lpu237::get_instance());
+	if (mgmt.is_loaded_parameter()) {
+		cprogress dlg;
+		dlg.set_save_mode(true).DoModal();
+	}
+	else {
+		cprogress dlg;
+		dlg.set_save_mode(false).DoModal();
+	}
+
 }
 
 

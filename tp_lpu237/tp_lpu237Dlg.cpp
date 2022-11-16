@@ -8,6 +8,7 @@
 #include "tp_lpu237Dlg.h"
 #include "afxdialogex.h"
 
+#include "_exm_mgmt_lpu237.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -73,6 +74,22 @@ BOOL Ctplpu237Dlg::OnInitDialog()
 	m_ptr_tab_test->MoveWindow(x, y, rc.Width(), rc.Height());
 	m_ptr_tab_test->ShowWindow(SW_HIDE);
 
+	//
+	_exam::cmgmt_lpu237& mgmt(_exam::cmgmt_lpu237::get_instance());
+
+	do {
+		if (!mgmt.load_dll()) {
+			AfxMessageBox(L"component dll isn't.");
+			continue;
+		}
+		if (!mgmt.select_the_first_device().first) {
+			AfxMessageBox(L"Please connects a MSR device. and restart program.");
+			continue;
+		}
+		
+		ATLTRACE(L" success : mgmt. \n");
+
+	}while(false);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }

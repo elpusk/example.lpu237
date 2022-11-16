@@ -5,7 +5,7 @@
 #include "tp_lpu237.h"
 #include "c_dlg_test_water_lock.h"
 #include "afxdialogex.h"
-
+#include "cprogress.h"
 
 // c_dlg_test_water_lock dialog
 
@@ -35,7 +35,139 @@ void c_dlg_test_water_lock::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(c_dlg_test_water_lock, CDialogEx)
+	ON_CBN_SELCHANGE(IDC_COMBO_IBUTTON_TYPE, &c_dlg_test_water_lock::OnCbnSelchangeComboIbuttonType)
+	ON_WM_CLOSE()
+	ON_BN_CLICKED(IDCANCEL, &c_dlg_test_water_lock::OnBnClickedCancel)
+	ON_BN_CLICKED(IDOK, &c_dlg_test_water_lock::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
 // c_dlg_test_water_lock message handlers
+
+
+BOOL c_dlg_test_water_lock::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+
+	_exam::cmgmt_lpu237& mgmt(_exam::cmgmt_lpu237::get_instance());
+
+	if (!mgmt.is_loaded_parameter()) {
+
+		cprogress dlg;
+		dlg.set_save_mode(false).DoModal();
+
+	}
+
+	//m_static_serial_number;
+
+	m_static_state.SetWindowText(mgmt.get_ibutton_status_by_string().c_str());
+
+	m_edit_port_type.SetWindowText(mgmt.get_active_port_type_by_string().c_str());
+	
+	cdll_lpu237_tools::type_list_wstring list_type = mgmt.get_valied_ibutton_mode_by_string();
+	for (auto item : list_type) {
+		m_combo_ibutton_type.AddString(item.c_str());
+	}//end for
+
+	cdll_lpu237_tools::type_pair_result_string pair_result_string(false, std::wstring());
+	pair_result_string = mgmt.get_ibutton_mode_by_string();
+	m_combo_ibutton_type.SelectString(0, pair_result_string.second.c_str());
+
+	pair_result_string = mgmt.get_ibutton_tag(true);
+	m_edit_start_sentinel.SetWindowText(pair_result_string.second.c_str());
+
+	pair_result_string = mgmt.get_ibutton_tag(false);
+	m_edit_stop_sentinel.SetWindowText(pair_result_string.second.c_str());
+	
+	m_edit_interface_port.SetWindowText(mgmt.get_com_port_by_string().c_str());
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+				  // EXCEPTION: OCX Property Pages should return FALSE
+}
+
+
+void c_dlg_test_water_lock::OnCbnSelchangeComboIbuttonType()
+{
+	do {
+		int n_sel = m_combo_ibutton_type.GetCurSel();
+		if (n_sel < 0)
+			continue;
+		CString s_data;
+		m_combo_ibutton_type.GetLBText(n_sel, s_data);
+
+		_exam::cmgmt_lpu237& mgmt(_exam::cmgmt_lpu237::get_instance());
+		if (!mgmt.is_loaded_parameter())
+			continue;
+		mgmt.set_ibutton_mode_by_string((LPCTSTR)s_data);
+	} while (false);
+
+}
+
+bool c_dlg_test_water_lock::is_exit()
+{
+	bool b_exit(true);
+	cdll_lpu237_tools::type_v_tag v_tag[2];
+
+	do {
+		CString s_data;
+		std::wstring s_in;
+		m_edit_start_sentinel.GetWindowText(s_data);
+		s_in = (LPCTSTR)s_data;;
+
+		if (!_exam::cmgmt_lpu237::get_tag_from_string(v_tag[0], s_in, 14)) {
+			b_exit = false;
+			continue;
+		}
+		//
+		m_edit_stop_sentinel.GetWindowText(s_data);
+		s_in = (LPCTSTR)s_data;;
+
+		if (!_exam::cmgmt_lpu237::get_tag_from_string(v_tag[1], s_in, 14)) {
+			b_exit = false;
+			continue;
+		}
+		//
+	} while (false);
+
+	if (b_exit) {
+		//format no error
+		_exam::cmgmt_lpu237& mgmt(_exam::cmgmt_lpu237::get_instance());
+		if (mgmt.is_loaded_parameter()) {
+			mgmt.set_ibutton_tag(true, v_tag[0]);
+			mgmt.set_ibutton_tag(false, v_tag[1]);
+		}
+		CDialogEx::OnClose();
+	}
+	else {
+		if (AfxMessageBox(L"the tag contains a invalied format.\r\n.Do you want to exit?", MB_YESNO | MB_ICONQUESTION) == IDYES) {
+			b_exit = true;
+			CDialogEx::OnClose();
+		}
+	}
+	return b_exit;
+}
+
+void c_dlg_test_water_lock::OnClose()
+{
+	if (is_exit()) {
+		CDialogEx::OnClose();
+	}
+}
+
+
+void c_dlg_test_water_lock::OnBnClickedCancel()
+{
+	//done handler
+	if (is_exit()) {
+		CDialogEx::OnCancel();
+	}
+}
+
+
+void c_dlg_test_water_lock::OnBnClickedOk()
+{
+	//close handler
+	if (is_exit()) {
+		CDialogEx::OnOK();
+	}
+}

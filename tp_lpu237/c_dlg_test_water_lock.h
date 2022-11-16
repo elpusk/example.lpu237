@@ -1,5 +1,6 @@
 #pragma once
 
+#include "_exm_mgmt_lpu237.h"
 
 // c_dlg_test_water_lock dialog
 
@@ -10,6 +11,9 @@ class c_dlg_test_water_lock : public CDialogEx
 public:
 	c_dlg_test_water_lock(CWnd* pParent = nullptr);   // standard constructor
 	virtual ~c_dlg_test_water_lock();
+
+private:
+	bool is_exit();
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
@@ -28,4 +32,9 @@ public:
 	CEdit m_edit_stop_sentinel;
 	CEdit m_edit_port_type;
 	CEdit m_edit_interface_port;
+	virtual BOOL OnInitDialog();
+	afx_msg void OnCbnSelchangeComboIbuttonType();
+	afx_msg void OnClose();
+	afx_msg void OnBnClickedCancel();
+	afx_msg void OnBnClickedOk();
 };

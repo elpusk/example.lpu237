@@ -47,9 +47,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -58,6 +60,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)lpu237</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -82,6 +85,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)lpu237</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -100,6 +104,8 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\third\project\third.project.tg_lpu237\tg_lpu237_tools\cdll_lpu237_tools.h" />
+    <ClInclude Include="cprogress.h" />
     <ClInclude Include="c_dlg_msr_config.h" />
     <ClInclude Include="c_dlg_msr_sentinel.h" />
     <ClInclude Include="c_dlg_msr_test.h" />
@@ -108,13 +114,17 @@
     <ClInclude Include="c_tab_opos.h" />
     <ClInclude Include="c_tab_test.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="KBConst.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="tp_lpu237.h" />
     <ClInclude Include="tp_lpu237Dlg.h" />
+    <ClInclude Include="_exm.h" />
+    <ClInclude Include="_exm_mgmt_lpu237.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cprogress.cpp" />
     <ClCompile Include="c_dlg_msr_config.cpp" />
     <ClCompile Include="c_dlg_msr_sentinel.cpp" />
     <ClCompile Include="c_dlg_msr_test.cpp" />
