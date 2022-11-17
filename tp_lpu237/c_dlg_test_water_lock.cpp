@@ -95,7 +95,8 @@ BOOL c_dlg_test_water_lock::OnInitDialog()
 
 	cdll_lpu237_tools::type_pair_result_string pair_result_string(false, std::wstring());
 	pair_result_string = mgmt.get_ibutton_mode_by_string();
-	m_combo_ibutton_type.SelectString(0, pair_result_string.second.c_str());
+
+	_exam::select_combobox_by_string(m_combo_ibutton_type, pair_result_string.second);
 
 	pair_result_string = mgmt.get_ibutton_tag(true);
 	m_edit_start_sentinel.SetWindowText(pair_result_string.second.c_str());

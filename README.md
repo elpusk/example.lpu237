@@ -13,4 +13,6 @@ lpu237 device 사용 방법
 
 ## tp_lpu237 project
 - 변경내용
-  - ibutton reading test 기능. interface 는 수동으로 HID 로 변경해 주어야 함.
+  - ibutton mode 설정 오류 수정. tg_lpu237_tools.dll 를 v0.9 ->v0.10 으로.
+  - tg_lpu237_tools.h 상단 remark 만 변경.
+  - combobox SelectString 를  SetCurSel 으로 변경.

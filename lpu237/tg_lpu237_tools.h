@@ -1,7 +1,7 @@
 #pragma once
 
 /*!
-*		2017.06.29	- release version 1.0 : starting.......
+*		2022.11.	- coding starting.......
 *
 */
 #include <Windows.h>

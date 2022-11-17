@@ -82,18 +82,17 @@ BOOL c_dlg_msr_config::OnInitDialog()
 
 	//
 	// ini selection
-
-	m_combo_port_type.SelectString(0, mgmt.get_active_port_type_by_string().c_str());
+	_exam::select_combobox_by_string(m_combo_port_type, mgmt.get_active_port_type_by_string());
 	m_combo_interface_type.SetCurSel(0);
 
 	if (mgmt.is_enabled_buzzer()) {
-		m_combo_buzzer.SelectString(0, L"Enable");
+		_exam::select_combobox_by_string(m_combo_buzzer, L"Enable");
 	}
 	else {
-		m_combo_buzzer.SelectString(0, L"Disable");
+		_exam::select_combobox_by_string(m_combo_buzzer, L"Disable");
 	}
 
-	m_combo_keyboard_language.SelectString(0, mgmt.get_language_by_string().c_str());
+	_exam::select_combobox_by_string(m_combo_keyboard_language, mgmt.get_language_by_string());
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // EXCEPTION: OCX Property Pages should return FALSE

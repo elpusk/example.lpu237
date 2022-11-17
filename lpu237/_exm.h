@@ -18,6 +18,17 @@ namespace _exam
 
 	};
 
+	static void select_combobox_by_string(CComboBox &combo, const std::wstring& s_sel)
+	{
+		for (int i = 0; i < combo.GetCount(); i++) {
+			CString sData;
+			combo.GetLBText(i, sData);
+			if (s_sel.compare((LPCTSTR)sData) == 0) {
+				combo.SetCurSel(i);
+			}
+		}//end for
+	}
+
 	class cevent {
 	public:
 		cevent() : m_h_event(CreateEvent(NULL,TRUE,FALSE,NULL))
@@ -59,6 +70,5 @@ namespace _exam
 	private:
 		HANDLE m_h_event;
 	};
-
 
 }
