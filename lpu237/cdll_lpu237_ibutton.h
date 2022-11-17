@@ -77,7 +77,7 @@ public:
 			m_open = reinterpret_cast<_type_LPU237Lock_open>(::GetProcAddress(m_h_module, "LPU237Lock_open"));
 			m_close = reinterpret_cast<_type_LPU237Lock_close>(::GetProcAddress(m_h_module, "LPU237Lock_close"));
 			m_enable = reinterpret_cast<_type_LPU237Lock_enable>(::GetProcAddress(m_h_module, "LPU237Lock_enable"));
-			m_disable = reinterpret_cast<_type_LPU237Lock_disable>(::GetProcAddress(m_h_module, "typeLPU237Lock_disable"));
+			m_disable = reinterpret_cast<_type_LPU237Lock_disable>(::GetProcAddress(m_h_module, "LPU237Lock_disable"));
 			m_cancel = reinterpret_cast<_type_LPU237Lock_cancel_wait_key>(::GetProcAddress(m_h_module, "LPU237Lock_cancel_wait_key"));
 
 			m_start_get_key = reinterpret_cast<_type_LPU237Lock_wait_key_with_callback>(::GetProcAddress(m_h_module, "LPU237Lock_wait_key_with_callback"));

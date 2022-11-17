@@ -810,7 +810,7 @@ namespace _exam
 
 			std::lock_guard<std::mutex> lock(m_mutex_status);
 			cdll_lpu237_tools& tools(cdll_lpu237_tools::get_instance());
-			cdll_lpu237_tools& ibutton(cdll_lpu237_tools::get_instance());
+			cdll_lpu237_ibutton& ibutton(cdll_lpu237_ibutton::get_instance());
 			do {
 				if (m_status != cmgmt_lpu237::st_undefined) {
 					b_result = true;
@@ -853,7 +853,7 @@ namespace _exam
 				tools.off();
 				tools.unload();
 
-				cdll_lpu237_tools& ibutton(cdll_lpu237_tools::get_instance());
+				cdll_lpu237_ibutton& ibutton(cdll_lpu237_ibutton::get_instance());
 				ibutton.off();
 				ibutton.unload();
 				//
@@ -909,7 +909,7 @@ namespace _exam
 			std::lock_guard<std::mutex> lock(m_mutex_status);
 			cdll_lpu237_tools& tools(cdll_lpu237_tools::get_instance());
 			do {
-				if (m_status != cmgmt_lpu237::st_select_device) {
+				if (m_status < cmgmt_lpu237::st_select_device) {
 					continue;
 				}
 				m_h_dev = tools.open(m_s_dev_path);
@@ -1299,6 +1299,7 @@ namespace _exam
 			return std::wstring(L"REMOVED");
 		}
 
+		//
 		cmgmt_lpu237::type_result_restart_value get_ibutton_key_in_event_handler(WPARAM wparam, LPARAM lparam)
 		{
 			bool b_result_restart(false);
@@ -1334,14 +1335,14 @@ namespace _exam
 			std::lock_guard<std::mutex> lock(m_mutex_status);
 			cdll_lpu237_ibutton& ibutton(cdll_lpu237_ibutton::get_instance());
 			do {
-				if (m_status != cmgmt_lpu237::st_select_device) {
+				if (m_status < cmgmt_lpu237::st_select_device) {
 					continue;
 				}
-				m_h_dev = ibutton.open(m_s_dev_path);
-				if (m_h_dev == INVALID_HANDLE_VALUE)
+				m_h_ibutton = ibutton.open(m_s_dev_path);
+				if (m_h_ibutton == INVALID_HANDLE_VALUE)
 					continue;
 
-				if (!ibutton.enable(m_h_dev, true).first)
+				if (!ibutton.enable(m_h_ibutton, true).first)
 					continue;
 
 				b_enable = true;
@@ -1351,7 +1352,7 @@ namespace _exam
 				m_v_key.resize(0);
 				m_evet_for_cancel.reset();
 
-				std::tie(b_result,m_dw_ibutton_result_index) = ibutton.start_get_key(m_h_dev, cmgmt_lpu237::_cb_get_ibutton_key, this);
+				std::tie(b_result,m_dw_ibutton_result_index) = ibutton.start_get_key(m_h_ibutton, cmgmt_lpu237::_cb_get_ibutton_key, this);
 				if(!b_result)
 					continue;
 				//
@@ -1359,13 +1360,13 @@ namespace _exam
 			} while (false);
 
 			if (!b_result) {
-				if (m_h_dev != INVALID_HANDLE_VALUE) {
+				if (m_h_ibutton != INVALID_HANDLE_VALUE) {
 
 					if (b_enable)
-						ibutton.enable(m_h_dev,false);
+						ibutton.enable(m_h_ibutton,false);
 					//
-					ibutton.close(m_h_dev);
-					m_h_dev = INVALID_HANDLE_VALUE;
+					ibutton.close(m_h_ibutton);
+					m_h_ibutton = INVALID_HANDLE_VALUE;
 					m_dw_ibutton_result_index = LPU237LOCK_DLL_RESULT_ERROR;
 					m_v_key.resize(0);
 				}
@@ -1373,26 +1374,27 @@ namespace _exam
 			return b_result;
 		}
 
-		void stop_get_ibutton_key()
+		void stop_get_ibutton_key_and_exit()
 		{
 			std::lock_guard<std::mutex> lock(m_mutex_status);
 			cdll_lpu237_ibutton& ibutton(cdll_lpu237_ibutton::get_instance());
 			do {
-				if (m_status != cmgmt_lpu237::st_select_device) {
+				if (m_status < cmgmt_lpu237::st_select_device) {
 					continue;
 				}
-				if (m_h_dev == INVALID_HANDLE_VALUE) {
+				if (m_h_ibutton == INVALID_HANDLE_VALUE) {
 					continue;
 				}
-
-				if (ibutton.cancel(m_h_dev)) {
+				/*
+				if (ibutton.cancel(m_h_ibutton)) {
 					//waits inner worker here.
 					m_evet_for_cancel.wait(1000);//waits 1 sec.
 				}
-				ibutton.enable(m_h_dev, false);
-				ibutton.close(m_h_dev);
+				ibutton.enable(m_h_ibutton, false);
+				*/
+				ibutton.close(m_h_ibutton);
 				//
-				m_h_dev = INVALID_HANDLE_VALUE;
+				m_h_ibutton = INVALID_HANDLE_VALUE;
 				m_h_handler = NULL;
 				m_n_msg = 0;
 				m_v_key.resize(0);
@@ -1409,6 +1411,8 @@ namespace _exam
 		{
 			m_status = cmgmt_lpu237::st_undefined;
 			m_h_dev = INVALID_HANDLE_VALUE;
+
+			m_h_ibutton = INVALID_HANDLE_VALUE;
 			m_s_dev_path.clear();
 
 			m_dw_ibutton_result_index = LPU237LOCK_DLL_RESULT_ERROR;
@@ -1534,7 +1538,7 @@ namespace _exam
 				bool b_result(false);
 				p_obj->m_evet_for_cancel.reset();
 				//
-				std::tie(b_result, p_obj->m_dw_ibutton_result_index) = ibutton.start_get_key(p_obj->m_h_dev, cmgmt_lpu237::_cb_get_ibutton_key, p_obj);
+				std::tie(b_result, p_obj->m_dw_ibutton_result_index) = ibutton.start_get_key(p_obj->m_h_ibutton, cmgmt_lpu237::_cb_get_ibutton_key, p_obj);
 				if (b_result)
 					restart_result = 1;
 				//
@@ -1552,6 +1556,8 @@ namespace _exam
 
 		HANDLE m_h_dev;
 		std::wstring m_s_dev_path;
+
+		HANDLE m_h_ibutton;
 		DWORD m_dw_ibutton_result_index;
 
 		HWND m_h_handler;

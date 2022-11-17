@@ -24,6 +24,7 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
 	DECLARE_MESSAGE_MAP()
+	afx_msg LRESULT on_get_ibutton(WPARAM wParam, LPARAM lParam);
 public:
 	CStatic m_static_state;
 	CStatic m_static_serial_number;

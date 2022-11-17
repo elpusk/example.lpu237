@@ -39,10 +39,34 @@ BEGIN_MESSAGE_MAP(c_dlg_test_water_lock, CDialogEx)
 	ON_WM_CLOSE()
 	ON_BN_CLICKED(IDCANCEL, &c_dlg_test_water_lock::OnBnClickedCancel)
 	ON_BN_CLICKED(IDOK, &c_dlg_test_water_lock::OnBnClickedOk)
+	ON_MESSAGE(_exam::const_wnd_msg_get_ibutton, &c_dlg_test_water_lock::on_get_ibutton)
 END_MESSAGE_MAP()
 
 
 // c_dlg_test_water_lock message handlers
+
+LRESULT c_dlg_test_water_lock::on_get_ibutton(WPARAM wParam, LPARAM lParam)
+{
+	_exam::cmgmt_lpu237& mgmt(_exam::cmgmt_lpu237::get_instance());
+
+	do {
+		_exam::cmgmt_lpu237::type_result_restart_value result(mgmt.get_ibutton_key_in_event_handler(wParam, lParam));
+		if (!std::get<0>(result)) {
+			AfxMessageBox(L"ERROR reading ibutton");
+		}
+		if (!std::get<1>(result)) {
+			AfxMessageBox(L"ERROR restart ibutton reading test. restart program !");
+			continue;
+		}
+
+		if (std::get<0>(result)) {
+			m_static_serial_number.SetWindowText(std::get<2>(result).c_str());
+		}
+
+	} while (false);
+	//
+	return 0;
+}
 
 
 BOOL c_dlg_test_water_lock::OnInitDialog()
@@ -80,7 +104,12 @@ BOOL c_dlg_test_water_lock::OnInitDialog()
 	m_edit_stop_sentinel.SetWindowText(pair_result_string.second.c_str());
 	
 	m_edit_interface_port.SetWindowText(mgmt.get_com_port_by_string().c_str());
-
+	
+	//start ibutton test
+	if (!mgmt.start_get_ibutton_key(m_hWnd, _exam::const_wnd_msg_get_ibutton)) {
+		AfxMessageBox(L"ERROR:start i-button read.");
+	}
+	
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -136,12 +165,10 @@ bool c_dlg_test_water_lock::is_exit()
 			mgmt.set_ibutton_tag(true, v_tag[0]);
 			mgmt.set_ibutton_tag(false, v_tag[1]);
 		}
-		CDialogEx::OnClose();
 	}
 	else {
 		if (AfxMessageBox(L"the tag contains a invalied format.\r\n.Do you want to exit?", MB_YESNO | MB_ICONQUESTION) == IDYES) {
 			b_exit = true;
-			CDialogEx::OnClose();
 		}
 	}
 	return b_exit;
@@ -150,6 +177,7 @@ bool c_dlg_test_water_lock::is_exit()
 void c_dlg_test_water_lock::OnClose()
 {
 	if (is_exit()) {
+		_exam::cmgmt_lpu237::get_instance().stop_get_ibutton_key_and_exit();
 		CDialogEx::OnClose();
 	}
 }
@@ -159,6 +187,7 @@ void c_dlg_test_water_lock::OnBnClickedCancel()
 {
 	//done handler
 	if (is_exit()) {
+		_exam::cmgmt_lpu237::get_instance().stop_get_ibutton_key_and_exit();
 		CDialogEx::OnCancel();
 	}
 }
@@ -168,6 +197,7 @@ void c_dlg_test_water_lock::OnBnClickedOk()
 {
 	//close handler
 	if (is_exit()) {
+		_exam::cmgmt_lpu237::get_instance().stop_get_ibutton_key_and_exit();
 		CDialogEx::OnOK();
 	}
 }

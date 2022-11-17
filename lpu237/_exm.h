@@ -13,7 +13,9 @@ namespace _exam
 	enum : unsigned int
 	{
 		const_wnd_msg_get_parameter = WM_APP+100,
-		const_wnd_msg_set_parameter = WM_APP + 101
+		const_wnd_msg_set_parameter = WM_APP + 101,
+		const_wnd_msg_get_ibutton = WM_APP + 102
+
 	};
 
 	class cevent {

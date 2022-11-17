@@ -6,6 +6,7 @@
 #include "c_tab_test.h"
 #include "afxdialogex.h"
 
+#include "_exm_mgmt_lpu237.h"
 
 // c_tab_test dialog
 
