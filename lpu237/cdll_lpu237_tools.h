@@ -231,7 +231,7 @@ public://exported methods
 			if (n_size == 0)
 				continue;
 			
-			if (_get_string_from_multi_string(list_device, &v_ws[0]) == 0)
+			if (cdll_lpu237_tools::_get_string_from_multi_string(list_device, &v_ws[0]) == 0)
 				continue;
 			//
 		} while (false);

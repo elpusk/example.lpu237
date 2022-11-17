@@ -104,7 +104,15 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\third\project\third.project.tg_lpu237\tg_lpu237_tools\cdll_lpu237_tools.h" />
+    <ClInclude Include="..\lpu237\cdll_lpu237_ibutton.h" />
+    <ClInclude Include="..\lpu237\cdll_lpu237_tools.h" />
+    <ClInclude Include="..\lpu237\KBConst.h" />
+    <ClInclude Include="..\lpu237\oposmsr_ocx.h" />
+    <ClInclude Include="..\lpu237\opos\Opos.h" />
+    <ClInclude Include="..\lpu237\opos\OposMsr.h" />
+    <ClInclude Include="..\lpu237\tg_lpu237_tools.h" />
+    <ClInclude Include="..\lpu237\_exm.h" />
+    <ClInclude Include="..\lpu237\_exm_mgmt_lpu237.h" />
     <ClInclude Include="cprogress.h" />
     <ClInclude Include="c_dlg_msr_config.h" />
     <ClInclude Include="c_dlg_msr_sentinel.h" />
@@ -114,16 +122,14 @@
     <ClInclude Include="c_tab_opos.h" />
     <ClInclude Include="c_tab_test.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="KBConst.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="tp_lpu237.h" />
     <ClInclude Include="tp_lpu237Dlg.h" />
-    <ClInclude Include="_exm.h" />
-    <ClInclude Include="_exm_mgmt_lpu237.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\lpu237\oposmsr_ocx.cpp" />
     <ClCompile Include="cprogress.cpp" />
     <ClCompile Include="c_dlg_msr_config.cpp" />
     <ClCompile Include="c_dlg_msr_sentinel.cpp" />

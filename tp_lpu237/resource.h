@@ -2,6 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by tplpu237.rc
 //
+#define IDC_OPOSMSR                     101
 #define IDD_TP_LPU237_DIALOG            102
 #define IDR_MAINFRAME                   128
 #define IDD_DIALOG_OPOS                 130
@@ -38,7 +39,6 @@
 #define IDC_COMBO_KEYBOARD_LANGUAGE     1018
 #define IDC_EDIT_START_SENTINEL         1018
 #define IDC_EDIT_END_SENTINEL           1019
-#define IDC_PROGRESS1                   1019
 #define IDC_PROGRESS_PROCESS            1019
 #define IDC_EDIT_PORT_TYPE              1020
 #define IDC_EDIT_INTERFACE_PORT         1021
@@ -50,6 +50,6 @@
 #define _APS_NEXT_RESOURCE_VALUE        146
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1020
-#define _APS_NEXT_SYMED_VALUE           101
+#define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif
