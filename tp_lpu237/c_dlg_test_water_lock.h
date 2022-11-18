@@ -15,6 +15,9 @@ public:
 private:
 	bool is_exit();
 
+private:
+	std::wstring m_s_old_interface;
+
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_DIALOG_TEST_SUB_WATER_LOCK };

@@ -180,6 +180,36 @@ DWORD WINAPI LPU237_tools_msr_start_get_setting(const BYTE* sId, type_lpu237_too
 */
 DWORD WINAPI LPU237_tools_msr_start_set_setting(const BYTE* sId, type_lpu237_tools_callback_set_parameter cb, void* pUser);
 
+/*!
+* function
+*	start load parameter from device.( unicode version ). except combination parameter
+*
+* parameters
+*	sId : [in] the device ID.( ID is 16 bytes )
+*	cb : [in] callback function for get system paramter.
+*	pUser : [in] user data pointer for calling cb().
+*
+* return
+* 	if error, return LPU237_TOOLS_RESULT_ERROR.
+*	else LPU237_TOOLS_RESULT_SUCCESS
+*/
+DWORD WINAPI LPU237_tools_msr_start_get_setting_except_combination(const BYTE* sId, type_lpu237_tools_callback_get_parameter cb, void* pUser);
+
+
+/*!
+* function
+*	start save parameter to device.( unicode version ) except combination parameter
+*
+* parameters
+*	sId : [in] the device ID.( ID is 16 bytes )
+*	cb : [in] callback function for set system paramter.
+*	pUser : [in] user data pointer for calling cb().
+*
+* return
+* 	if error, return LPU237_TOOLS_RESULT_ERROR.
+*	else LPU237_TOOLS_RESULT_SUCCESS
+*/
+DWORD WINAPI LPU237_tools_msr_start_set_setting_except_combination(const BYTE* sId, type_lpu237_tools_callback_set_parameter cb, void* pUser);
 
 /*!
 * function
@@ -254,6 +284,21 @@ DWORD WINAPI LPU237_tools_msr_get_active_and_valied_interface(HANDLE hDev, BYTE*
 *	else LPU237_TOOLS_RESULT_SUCCESS
 */
 DWORD WINAPI LPU237_tools_msr_set_interface(HANDLE hDev, BYTE c_inteface);
+
+/*!
+* function
+*	set active interfafce to device.(RAM) and be saved.(Flash memory)
+*
+* parameters
+*	hDev : [in] device handle( return value of LPU237_tools_open() )
+*	pc_interface : [in/out] in - active interface, out - deactived interface. LPU237_TOOLS_INF_x data.
+*
+* return
+* 	if error, return LPU237_TOOLS_RESULT_ERROR
+*	else LPU237_TOOLS_RESULT_SUCCESS
+*/
+DWORD WINAPI LPU237_tools_msr_set_interface_to_device_and_apply(HANDLE hDev, BYTE* pc_inteface);
+
 
 /*!
 * function

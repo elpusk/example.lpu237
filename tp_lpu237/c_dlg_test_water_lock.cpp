@@ -81,6 +81,13 @@ BOOL c_dlg_test_water_lock::OnInitDialog()
 		dlg.set_save_mode(false).DoModal();
 
 	}
+	cdll_lpu237_tools::type_pair_result_string pair_result_string(false, std::wstring());
+
+	pair_result_string = mgmt.set_active_port_type_to_device_but_not_apply_by_string(L"USB_HID");
+	if (pair_result_string.first) {
+		m_s_old_interface = pair_result_string.second;
+		ATLTRACE(L" : changed inf - %s", L"USB_HID");
+	}
 
 	//m_static_serial_number;
 
@@ -93,7 +100,7 @@ BOOL c_dlg_test_water_lock::OnInitDialog()
 		m_combo_ibutton_type.AddString(item.c_str());
 	}//end for
 
-	cdll_lpu237_tools::type_pair_result_string pair_result_string(false, std::wstring());
+	
 	pair_result_string = mgmt.get_ibutton_mode_by_string();
 
 	_exam::select_combobox_by_string(m_combo_ibutton_type, pair_result_string.second);
@@ -178,7 +185,15 @@ bool c_dlg_test_water_lock::is_exit()
 void c_dlg_test_water_lock::OnClose()
 {
 	if (is_exit()) {
-		_exam::cmgmt_lpu237::get_instance().stop_get_ibutton_key_and_exit();
+		_exam::cmgmt_lpu237& mgmt(_exam::cmgmt_lpu237::get_instance());
+		mgmt.stop_get_ibutton_key_and_exit();
+		if (!m_s_old_interface.empty()) {
+			//recover interface
+			 cdll_lpu237_tools::type_pair_result_string pair_result_string = mgmt.set_active_port_type_to_device_but_not_apply_by_string(m_s_old_interface);
+			 if (pair_result_string.first) {
+				 ATLTRACE(L" : recoverd inf - %s", m_s_old_interface.c_str());
+			 }
+		}
 		CDialogEx::OnClose();
 	}
 }
@@ -188,7 +203,15 @@ void c_dlg_test_water_lock::OnBnClickedCancel()
 {
 	//done handler
 	if (is_exit()) {
-		_exam::cmgmt_lpu237::get_instance().stop_get_ibutton_key_and_exit();
+		_exam::cmgmt_lpu237& mgmt(_exam::cmgmt_lpu237::get_instance());
+		mgmt.stop_get_ibutton_key_and_exit();
+		if (!m_s_old_interface.empty()) {
+			//recover interface
+			cdll_lpu237_tools::type_pair_result_string pair_result_string = mgmt.set_active_port_type_to_device_but_not_apply_by_string(m_s_old_interface);
+			if (pair_result_string.first) {
+				ATLTRACE(L" : recoverd inf - %s", m_s_old_interface.c_str());
+			}
+		}
 		CDialogEx::OnCancel();
 	}
 }
@@ -198,7 +221,15 @@ void c_dlg_test_water_lock::OnBnClickedOk()
 {
 	//close handler
 	if (is_exit()) {
-		_exam::cmgmt_lpu237::get_instance().stop_get_ibutton_key_and_exit();
+		_exam::cmgmt_lpu237& mgmt(_exam::cmgmt_lpu237::get_instance());
+		mgmt.stop_get_ibutton_key_and_exit();
+		if (!m_s_old_interface.empty()) {
+			//recover interface
+			cdll_lpu237_tools::type_pair_result_string pair_result_string = mgmt.set_active_port_type_to_device_but_not_apply_by_string(m_s_old_interface);
+			if (pair_result_string.first) {
+				ATLTRACE(L" : recoverd inf - %s", m_s_old_interface.c_str());
+			}
+		}
 		CDialogEx::OnOK();
 	}
 }

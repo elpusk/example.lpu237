@@ -29,9 +29,13 @@ private:
 	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_start_get_setting)(const BYTE*, type_lpu237_tools_callback_get_parameter, void*);
 	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_start_set_setting)(const BYTE*, type_lpu237_tools_callback_set_parameter, void*);
 	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_cancel)();
+	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_start_get_setting_except_combination)(const BYTE* sId, type_lpu237_tools_callback_get_parameter cb, void* pUser);
+	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_start_set_setting_except_combination)(const BYTE* sId, type_lpu237_tools_callback_set_parameter cb, void* pUser);
+
 
 	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_get_active_and_valied_interface)(HANDLE hDev, BYTE* s_inteface);
 	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_set_interface)(HANDLE hDev, BYTE c_inteface);
+	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_set_interface_to_device_and_apply)(HANDLE hDev, BYTE* pc_inteface);
 
 	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_get_buzzer)(HANDLE hDev, BYTE* pc_on);
 	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_set_buzzer)(HANDLE hDev, BYTE c_on);
@@ -99,9 +103,12 @@ public:
 			m_start_get_setting = reinterpret_cast<_type_LPU237_tools_msr_start_get_setting>(::GetProcAddress(m_h_module, "LPU237_tools_msr_start_get_setting"));
 			m_start_set_setting = reinterpret_cast<_type_LPU237_tools_msr_start_set_setting>(::GetProcAddress(m_h_module, "LPU237_tools_msr_start_set_setting"));
 			m_cancel = reinterpret_cast<_type_LPU237_tools_msr_cancel>(::GetProcAddress(m_h_module, "LPU237_tools_msr_cancel"));
+			m_start_get_setting_except_combination = reinterpret_cast<_type_LPU237_tools_msr_start_get_setting_except_combination>(::GetProcAddress(m_h_module, "LPU237_tools_msr_start_get_setting_except_combination"));
+			m_start_set_setting_except_combination = reinterpret_cast<_type_LPU237_tools_msr_start_set_setting_except_combination>(::GetProcAddress(m_h_module, "LPU237_tools_msr_start_set_setting_except_combination"));
 
 			m_get_interface = reinterpret_cast<_type_LPU237_tools_msr_get_active_and_valied_interface>(::GetProcAddress(m_h_module, "LPU237_tools_msr_get_active_and_valied_interface"));
 			m_set_interface = reinterpret_cast<_type_LPU237_tools_msr_set_interface>(::GetProcAddress(m_h_module, "LPU237_tools_msr_set_interface"));
+			m_set_interface_to_device_and_apply = reinterpret_cast<_type_LPU237_tools_msr_set_interface_to_device_and_apply>(::GetProcAddress(m_h_module, "LPU237_tools_msr_set_interface_to_device_and_apply"));
 
 			m_get_buzzer = reinterpret_cast<_type_LPU237_tools_msr_get_buzzer>(::GetProcAddress(m_h_module, "LPU237_tools_msr_get_buzzer"));
 			m_set_buzzer = reinterpret_cast<_type_LPU237_tools_msr_set_buzzer>(::GetProcAddress(m_h_module, "LPU237_tools_msr_set_buzzer"));
@@ -141,9 +148,16 @@ public:
 				continue;
 			if (!m_cancel)
 				continue;
+			if (!m_start_get_setting_except_combination)
+				continue;
+			if (!m_start_set_setting_except_combination)
+				continue;
+
 			if (!m_get_interface)
 				continue;
 			if (!m_set_interface)
+				continue;
+			if (!m_set_interface_to_device_and_apply)
 				continue;
 			if (!m_get_buzzer)
 				continue;
@@ -318,6 +332,32 @@ public://exported methods
 		return b_result;
 	}
 
+	bool start_get_setting_except_combination(const cdll_lpu237_tools::type_v_id& v_id, type_lpu237_tools_callback_get_parameter cb, void* p_user)
+	{
+		bool b_result(false);
+		do {
+			if (!m_start_get_setting_except_combination)
+				continue;
+			if (m_start_get_setting_except_combination(&v_id[0], cb, p_user) != LPU237_TOOLS_RESULT_SUCCESS)
+				continue;
+			//
+			b_result = true;
+		} while (false);
+		return b_result;
+	}
+	bool start_set_setting_except_combination(const cdll_lpu237_tools::type_v_id& v_id, type_lpu237_tools_callback_set_parameter cb, void* p_user)
+	{
+		bool b_result(false);
+		do {
+			if (!m_start_set_setting_except_combination)
+				continue;
+			if (m_start_set_setting_except_combination(&v_id[0], cb, p_user) != LPU237_TOOLS_RESULT_SUCCESS)
+				continue;
+			//
+			b_result = true;
+		} while (false);
+		return b_result;
+	}
 	/**
 	* return acvtive string interface
 	*/
@@ -415,6 +455,55 @@ public://exported methods
 			b_result = true;
 		} while (false);
 		return b_result;
+	}
+
+	/**
+	* @param s_inf  : "USB_KB", "USB_HID" or L"RS232"
+	* @return : first - result, second - interface string before being changed. "USB_KB", "USB_HID" or L"RS232"
+	*/
+	cdll_lpu237_tools::type_pair_result_string set_interface_to_device_and_apply_by_string(HANDLE h_dev, const std::wstring& s_inf)
+	{
+		bool b_result(false);
+		unsigned char c_inf(LPU237_TOOLS_INF_USBKB);
+		std::wstring s_old_inf;
+
+		do {
+			if (!m_set_interface_to_device_and_apply) {
+				continue;
+			}
+			if (s_inf.compare(L"USB_KB") == 0) {
+				c_inf = LPU237_TOOLS_INF_USBKB;
+			}
+			else if (s_inf.compare(L"USB_HID") == 0) {
+				c_inf = LPU237_TOOLS_INF_USBHID;
+			}
+			else if (s_inf.compare(L"RS232") == 0) {
+				c_inf = LPU237_TOOLS_INF_UART;
+			}
+			else {
+				continue;
+			}
+
+			if (m_set_interface_to_device_and_apply(h_dev, &c_inf) != LPU237_TOOLS_RESULT_SUCCESS)
+				continue;
+			switch (c_inf)
+			{
+			case LPU237_TOOLS_INF_USBKB:
+				s_old_inf = L"USB_KB";
+				break;
+			case LPU237_TOOLS_INF_USBHID:
+				s_old_inf = L"USB_HID";
+				break;
+			case LPU237_TOOLS_INF_UART:
+				s_old_inf = L"RS232";
+				break;
+			default:
+				break;
+			}//end switch
+			//
+			b_result = true;
+		} while (false);
+		return std::make_pair(b_result,s_old_inf);
 	}
 
 	/**
@@ -868,11 +957,15 @@ private:
 		m_start_get_setting = nullptr;
 		m_start_set_setting = nullptr;
 
+		m_start_get_setting_except_combination = nullptr;
+		m_start_set_setting_except_combination = nullptr;
+
 		m_cancel = nullptr;
 
 		m_get_interface = nullptr;
 		m_set_interface = nullptr;
-		
+		m_set_interface_to_device_and_apply = nullptr;
+
 		m_get_buzzer = nullptr;
 		m_set_buzzer = nullptr;
 		
@@ -936,9 +1029,13 @@ private:
 	_type_LPU237_tools_msr_start_get_setting m_start_get_setting;
 	_type_LPU237_tools_msr_start_set_setting m_start_set_setting;
 	_type_LPU237_tools_msr_cancel m_cancel;
+	_type_LPU237_tools_msr_start_get_setting_except_combination m_start_get_setting_except_combination;
+	_type_LPU237_tools_msr_start_set_setting_except_combination m_start_set_setting_except_combination;
 
 	_type_LPU237_tools_msr_get_active_and_valied_interface m_get_interface;
 	_type_LPU237_tools_msr_set_interface m_set_interface;
+	_type_LPU237_tools_msr_set_interface_to_device_and_apply m_set_interface_to_device_and_apply;
+
 	_type_LPU237_tools_msr_get_buzzer m_get_buzzer;
 	_type_LPU237_tools_msr_set_buzzer m_set_buzzer;
 	_type_LPU237_tools_msr_get_language m_get_language;

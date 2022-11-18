@@ -923,7 +923,7 @@ namespace _exam
 				m_h_handler = h_handler;
 				m_n_msg = n_msg;
 
-				if (!tools.start_get_setting(v_id, cmgmt_lpu237::_cb_get_parameter, this))
+				if (!tools.start_get_setting_except_combination(v_id, cmgmt_lpu237::_cb_get_parameter, this))
 					continue;
 				//
 				b_result = true;
@@ -958,7 +958,7 @@ namespace _exam
 				m_h_handler = h_handler;
 				m_n_msg = n_msg;
 
-				if (!tools.start_set_setting(v_id, cmgmt_lpu237::_cb_set_parameter, this))
+				if (!tools.start_set_setting_except_combination(v_id, cmgmt_lpu237::_cb_set_parameter, this))
 					continue;
 				//
 				b_result = true;
@@ -1014,6 +1014,19 @@ namespace _exam
 				b_result = tools.set_interface_by_string(m_h_dev, s_inf);
 			} while (false);
 			return b_result;
+		}
+		cdll_lpu237_tools::type_pair_result_string set_active_port_type_to_device_but_not_apply_by_string(const std::wstring& s_inf)
+		{
+			bool b_result(false);
+			std::wstring s_old_inf;
+			do {
+				std::lock_guard<std::mutex> lock(m_mutex_status);
+				if (_chang_status(ev_none).first < st_loaded_parameter)
+					continue;
+				cdll_lpu237_tools& tools(cdll_lpu237_tools::get_instance());
+				std::tie(b_result,s_old_inf) = tools.set_interface_to_device_and_apply_by_string(m_h_dev, s_inf);
+			} while (false);
+			return std::make_pair(b_result,s_old_inf);
 		}
 
 		cdll_lpu237_tools::type_list_wstring get_valied_buzzer_by_string()

@@ -11,8 +11,20 @@ lpu237 device 사용 방법
 - MSR test 하기 위해서는 OPOS CCO 설치 필요.
 
 
+
 ## tp_lpu237 project
+- 중요 검토 사항.
+  - ibutton test 를 위해서는 interface가 USB_HID로 설정되어야 하기 위해, 편의를 목적으로 
+  - c_dlg_test_water_lock::OnInitDialog() 에서  mgmt.set_active_port_type_to_device_but_not_apply_by_string(L"USB_HID") 를 호출해서, 강제로 USB_HID 모드로 변경 하고
+  - c_dlg_test_water_lock 닫을 때  mgmt.set_active_port_type_to_device_but_not_apply_by_string(m_s_old_interface) 를 호출해서, interface mode 복구 한다.
+  - 이러한 방법은 마이컴 flash 쓰기를 발생 시켜, 마이컴 flash 쓰기 수명을 단축한다. 따라서 사용자 application 의 목적에 따라 고려하여
+  - 이 편의 기능을 사용 할 것인지 말 것인지 검토해야 한다.
+
 - 변경내용
-  - ibutton mode 설정 오류 수정. tg_lpu237_tools.dll 를 v0.9 ->v0.10 으로.
-  - tg_lpu237_tools.h 상단 remark 만 변경.
-  - combobox SelectString 를  SetCurSel 으로 변경.
+  - 성능 향상을 위해 tg_lpu237_tools.dll 를 v0.10 ->v0.11 으로.
+  - cdll_lpu237_tools.h 변경.
+  - tg_lpu237_tools.h 변경.
+  - 성능 향상을 위해 start_get_setting() 를 start_get_setting_except_combination 로 교체.
+  - 성능 향상을 위해 start_set_setting() 를 start_set_setting_except_combination 로 교체.
+  - c_dlg_test_water_lock::OnInitDialog() 에서  mgmt.set_active_port_type_to_device_but_not_apply_by_string(L"USB_HID") 를 호출해서, 강제로 USB_HID 모드로 변경
+  - c_dlg_test_water_lock 닫을 때  mgmt.set_active_port_type_to_device_but_not_apply_by_string(m_s_old_interface) 를 호출해서, interface mode 복구.
