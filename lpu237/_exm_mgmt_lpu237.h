@@ -817,13 +817,24 @@ namespace _exam
 					continue;
 				}
 				//
-				if (!tools.load(L"tg_lpu237_tools.dll"))
-					continue;
+				std::wstring s_default_dll_path(_exam::get_lpu230_component_dll_path().first);
+				std::wstring s_dll;
+
+				s_dll = s_default_dll_path;
+				s_dll += L"\\tg_lpu237_tools.dll";
+				if (!tools.load(s_dll)) {
+					if (!tools.load(L"tg_lpu237_tools.dll"))//search in current folder.
+						continue;
+				}
 				if (!tools.on())
 					continue;
 				//
-				if (!ibutton.load(L"tg_lpu237_ibutton.dll"))
-					continue;
+				s_dll = s_default_dll_path;
+				s_dll += L"\\tg_lpu237_ibutton.dll";
+				if (!ibutton.load(s_dll)) {
+					if (!ibutton.load(L"tg_lpu237_ibutton.dll"))//search in current folder.
+						continue;
+				}
 				if (!ibutton.on())
 					continue;
 				//

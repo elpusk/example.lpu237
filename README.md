@@ -9,6 +9,7 @@ lpu237 device 사용 방법
 - 현재 모든 하위 타입에서 소프트웨어적으로 UART interface 가 지원 되는 알 수 있는 방법 없음.(c,d,e type 만 알 수 있음.)
 - 소프트웨어적 방법으로, 프로그램 실행 전에, ibutton 이 연결 또는 제거 상태 인지 구분 불가능. 프로그램 실행 후, 이벤트가 발생하여 ibutton 값을 얻은 후 부터 식별 가능. 
 - MSR test 하기 위해서는 OPOS CCO 설치 필요.
+- 프로그램 실행 시키기 위해서는 mapper full version 설치. 필요.
 
 
 
@@ -19,12 +20,10 @@ lpu237 device 사용 방법
   - c_dlg_test_water_lock 닫을 때  mgmt.set_active_port_type_to_device_but_not_apply_by_string(m_s_old_interface) 를 호출해서, interface mode 복구 한다.
   - 이러한 방법은 마이컴 flash 쓰기를 발생 시켜, 마이컴 flash 쓰기 수명을 단축한다. 따라서 사용자 application 의 목적에 따라 고려하여
   - 이 편의 기능을 사용 할 것인지 말 것인지 검토해야 한다.
+  - 프로그램에서 사용 중인 dll( tg_lpu237_tools.dll, tg_lpu237_ibutton.dll 그리고 tg_rom.dll ) 가 업데이트 되었을 때, mapper 와 함께 배포 인스톨된 것들을 먼저 사용하게 설정하여,
+  - 다른 버전의 dll 이 다수 설치되어 발생하는 dll 지옥을 막아보는 것이 필요한지 검토 필요.
 
 - 변경내용
-  - 성능 향상을 위해 tg_lpu237_tools.dll 를 v0.10 ->v0.11 으로.
-  - cdll_lpu237_tools.h 변경.
-  - tg_lpu237_tools.h 변경.
-  - 성능 향상을 위해 start_get_setting() 를 start_get_setting_except_combination 로 교체.
-  - 성능 향상을 위해 start_set_setting() 를 start_set_setting_except_combination 로 교체.
-  - c_dlg_test_water_lock::OnInitDialog() 에서  mgmt.set_active_port_type_to_device_but_not_apply_by_string(L"USB_HID") 를 호출해서, 강제로 USB_HID 모드로 변경
-  - c_dlg_test_water_lock 닫을 때  mgmt.set_active_port_type_to_device_but_not_apply_by_string(m_s_old_interface) 를 호출해서, interface mode 복구.
+  - test_water_lock dialog 실행시, 항상 USB_HID 모드로 표시하는 오류 수정.
+  - 실행 파일과 같은 폴더에 있는 tg_lpu237_ibutton.dll 를 삭제하고, 설치된 mapper 에 있는 tg_lpu237_ibutton.dll를 먼저 사용 하도록 수정.
+  - 설치된 mapper 에 tg_lpu237_tools.dll 가 있으면, 먼저 사용 하도록 수정.

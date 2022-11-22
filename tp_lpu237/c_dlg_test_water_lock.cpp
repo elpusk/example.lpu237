@@ -93,7 +93,7 @@ BOOL c_dlg_test_water_lock::OnInitDialog()
 
 	m_static_state.SetWindowText(mgmt.get_ibutton_status_by_string().c_str());
 
-	m_edit_port_type.SetWindowText(mgmt.get_active_port_type_by_string().c_str());
+	m_edit_port_type.SetWindowText(m_s_old_interface.c_str());
 	
 	cdll_lpu237_tools::type_list_wstring list_type = mgmt.get_valied_ibutton_mode_by_string();
 	for (auto item : list_type) {
@@ -113,6 +113,9 @@ BOOL c_dlg_test_water_lock::OnInitDialog()
 	
 	m_edit_interface_port.SetWindowText(mgmt.get_com_port_by_string().c_str());
 	
+	//
+
+
 	//start ibutton test
 	if (!mgmt.start_get_ibutton_key(m_hWnd, _exam::const_wnd_msg_get_ibutton)) {
 		AfxMessageBox(L"ERROR:start i-button read.");
