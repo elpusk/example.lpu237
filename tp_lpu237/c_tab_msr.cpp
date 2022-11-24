@@ -71,5 +71,12 @@ void c_tab_msr::OnBnClickedButtonApply()
 
 void c_tab_msr::OnBnClickedButtonRestoreDefault()
 {
-	// TODO: Add your control notification handler code here
+	_exam::cmgmt_lpu237& mgmt(_exam::cmgmt_lpu237::get_instance());
+	if (mgmt.is_loaded_parameter()) {
+		mgmt.set_default();
+		AfxMessageBox(L"success set to default. please apply for saving parameters.");
+	}
+	else {
+		AfxMessageBox(L"not loaded device parameters.");
+	}
 }

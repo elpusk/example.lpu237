@@ -1,7 +1,8 @@
 #pragma once
 
 /*!
-*		2022.11.	- coding starting.......
+*	2022.11.	- coding starting.......
+*	2022.11.24 - release v1.0 .  add LPU237_tools_msr_set_default().
 *
 */
 #include <Windows.h>
@@ -213,6 +214,7 @@ DWORD WINAPI LPU237_tools_msr_start_set_setting_except_combination(const BYTE* s
 
 /*!
 * function
+*	Don't use this function.
 *	save the current lpu237 device setting.
 *
 * parameters
@@ -226,6 +228,7 @@ DWORD WINAPI LPU237_tools_msr_save_setting( HANDLE hDev );
 
 /*!
 * function
+*	Don't use this function.
 *	resetting  lpu237 device with saved setting.
 *
 * parameters
@@ -535,6 +538,20 @@ DWORD WINAPI LPU237_tools_msr_get_ibutton_remove_indication_tag(HANDLE hDev, BYT
 *	else LPU237_TOOLS_RESULT_SUCCESS
 */
 DWORD WINAPI LPU237_tools_msr_set_ibutton_remove_indication_tag(HANDLE hDev, const BYTE* s_tag, DWORD dw_tag);
+
+/*!
+* function
+*	set device parameter to default
+*
+* parameters
+*	hDev : [in] device handle( return value of LPU237_tools_open() )
+*
+* return
+* 	if error, return LPU237_TOOLS_RESULT_ERROR
+*	else LPU237_TOOLS_RESULT_SUCCESS
+*/
+DWORD WINAPI LPU237_tools_msr_set_default(HANDLE hDev);
+
 
 /*!
 * function

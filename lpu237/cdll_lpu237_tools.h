@@ -25,7 +25,7 @@ private:
 	typedef	DWORD(__stdcall* _type_LPU237_tools_get_list_w)(wchar_t*);
 	typedef	HANDLE(__stdcall* _type_LPU237_tools_open_w)(const wchar_t*);
 	typedef	DWORD(__stdcall* _type_LPU237_tools_close)(HANDLE);
-	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_get_id)(HANDLE , BYTE*);
+	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_get_id)(HANDLE, BYTE*);
 	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_start_get_setting)(const BYTE*, type_lpu237_tools_callback_get_parameter, void*);
 	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_start_set_setting)(const BYTE*, type_lpu237_tools_callback_set_parameter, void*);
 	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_cancel)();
@@ -58,8 +58,10 @@ private:
 	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_get_ibutton_remove_indication_tag)(HANDLE hDev, BYTE* s_tag);
 	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_set_ibutton_remove_indication_tag)(HANDLE hDev, const BYTE* s_tag, DWORD dw_tag);
 
+	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_set_default)(HANDLE hDev);
+
 public:
-	static cdll_lpu237_tools & get_instance()
+	static cdll_lpu237_tools& get_instance()
 	{
 		static cdll_lpu237_tools obj;
 		return obj;
@@ -130,6 +132,8 @@ public:
 			m_get_ibuton_remove = reinterpret_cast<_type_LPU237_tools_msr_get_ibutton_remove_indication_tag>(::GetProcAddress(m_h_module, "LPU237_tools_msr_get_ibutton_remove_indication_tag"));
 			m_set_ibutton_remove = reinterpret_cast<_type_LPU237_tools_msr_set_ibutton_remove_indication_tag>(::GetProcAddress(m_h_module, "LPU237_tools_msr_set_ibutton_remove_indication_tag"));
 
+			m_set_default = reinterpret_cast<_type_LPU237_tools_msr_set_default>(::GetProcAddress(m_h_module, "LPU237_tools_msr_set_default"));
+
 			if (!m_on)
 				continue;
 			if (!m_off)
@@ -187,7 +191,8 @@ public:
 				continue;
 			if (!m_set_ibutton_remove)
 				continue;
-
+			if (!m_set_default)
+				continue;
 			//
 			b_result = true;
 		} while (false);
@@ -228,7 +233,7 @@ public://exported methods
 		} while (false);
 		return b_result;
 	}
-	size_t get_list(cdll_lpu237_tools::type_list_wstring &list_device)
+	size_t get_list(cdll_lpu237_tools::type_list_wstring& list_device)
 	{
 		do {
 			list_device.clear();
@@ -244,14 +249,14 @@ public://exported methods
 			n_size = m_get_list(&v_ws[0]);
 			if (n_size == 0)
 				continue;
-			
+
 			if (cdll_lpu237_tools::_get_string_from_multi_string(list_device, &v_ws[0]) == 0)
 				continue;
 			//
 		} while (false);
 		return list_device.size();
 	}
-	HANDLE open(const std::wstring &s_dev_path)
+	HANDLE open(const std::wstring& s_dev_path)
 	{
 		HANDLE h_result(INVALID_HANDLE_VALUE);
 		do {
@@ -372,7 +377,9 @@ public://exported methods
 
 			DWORD dw_result(LPU237_TOOLS_RESULT_ERROR);
 			dw_result = m_get_interface(h_dev, NULL);
-			if(dw_result == LPU237_TOOLS_RESULT_ERROR)
+			if (dw_result == LPU237_TOOLS_RESULT_ERROR)
+				continue;
+			if (dw_result == 0)
 				continue;
 			std::vector<unsigned char> v_inf(dw_result, 0);
 			dw_result = m_get_interface(h_dev, &v_inf[0]);
@@ -410,7 +417,7 @@ public://exported methods
 					b_result = false;
 					break;
 				}//end switch
-			
+
 				if (!b_result)
 					break;//exit for
 			}//end for
@@ -503,7 +510,7 @@ public://exported methods
 			//
 			b_result = true;
 		} while (false);
-		return std::make_pair(b_result,s_old_inf);
+		return std::make_pair(b_result, s_old_inf);
 	}
 
 	/**
@@ -528,7 +535,7 @@ public://exported methods
 		return std::make_pair(b_result, b_enble);
 	}
 
-	bool set_buzzer_status(HANDLE h_dev,bool b_enable)
+	bool set_buzzer_status(HANDLE h_dev, bool b_enable)
 	{
 		bool b_result(false);
 
@@ -645,7 +652,7 @@ public://exported methods
 		} while (false);
 		return b_result;
 	}
-	
+
 	/**
 	* return : first-result, second - enable(true) or not
 	*/
@@ -661,7 +668,7 @@ public://exported methods
 			if (n_zero_base_track > 2)
 				continue;
 			//
-			unsigned char s_status[] = {0,0,0};
+			unsigned char s_status[] = { 0,0,0 };
 			if (m_get_track_status(h_dev, s_status) != LPU237_TOOLS_RESULT_SUCCESS)
 				continue;
 
@@ -692,7 +699,7 @@ public://exported methods
 			if (m_get_track_status(h_dev, s_status) != LPU237_TOOLS_RESULT_SUCCESS)
 				continue;
 			//
-			if(b_enable)
+			if (b_enable)
 				s_status[n_zero_base_track] = 1;
 			else
 				s_status[n_zero_base_track] = 0;
@@ -728,6 +735,11 @@ public://exported methods
 			dw_size = m_get_private_tag(h_dev, n_zero_base_track, c_prefix, NULL);
 			if (dw_size == LPU237_TOOLS_RESULT_ERROR)
 				continue;
+			if (dw_size == 0) {
+				b_result = true;
+				continue;
+			}
+
 			v_tag.resize(dw_size, 0);
 			dw_size = m_get_private_tag(h_dev, n_zero_base_track, c_prefix, &v_tag[0]);
 			if (dw_size == LPU237_TOOLS_RESULT_ERROR)
@@ -749,16 +761,19 @@ public://exported methods
 				continue;
 			if (n_zero_base_track > 2)
 				continue;
-			if (v_tag.empty())
-				continue;
-
 
 			unsigned char c_prefix(0);
 			if (b_prefix)
 				c_prefix = 1;
 
-			if( m_set_private_tag(h_dev, n_zero_base_track, c_prefix, &v_tag[0], v_tag.size() )!= LPU237_TOOLS_RESULT_SUCCESS )
-				continue;
+			if (v_tag.empty()) {
+				if (m_set_private_tag(h_dev, n_zero_base_track, c_prefix, NULL, v_tag.size()) != LPU237_TOOLS_RESULT_SUCCESS)
+					continue;
+			}
+			else {
+				if (m_set_private_tag(h_dev, n_zero_base_track, c_prefix, &v_tag[0], v_tag.size()) != LPU237_TOOLS_RESULT_SUCCESS)
+					continue;
+			}
 			//
 			b_result = true;
 		} while (false);
@@ -857,6 +872,10 @@ public://exported methods
 			dw_size = m_get_ibuton_tag(h_dev, c_remove, c_prefix, NULL);
 			if (dw_size == LPU237_TOOLS_RESULT_ERROR)
 				continue;
+			if (dw_size == 0) {
+				b_result = true;
+				continue;
+			}
 			v_tag.resize(dw_size, 0);
 			dw_size = m_get_ibuton_tag(h_dev, c_remove, c_prefix, &v_tag[0]);
 			if (dw_size == LPU237_TOOLS_RESULT_ERROR)
@@ -874,8 +893,6 @@ public://exported methods
 		do {
 			if (!m_set_ibuton_tag)
 				continue;
-			if (v_tag.empty())
-				continue;
 
 			unsigned char c_remove(0);
 			if (b_remove)
@@ -885,8 +902,14 @@ public://exported methods
 			if (b_prefix)
 				c_prefix = 1;
 
-			if (m_set_ibuton_tag(h_dev, c_remove, c_prefix, &v_tag[0], v_tag.size()) != LPU237_TOOLS_RESULT_SUCCESS)
-				continue;
+			if (v_tag.empty()) {
+				if (m_set_ibuton_tag(h_dev, c_remove, c_prefix, NULL, v_tag.size()) != LPU237_TOOLS_RESULT_SUCCESS)
+					continue;
+			}
+			else {
+				if (m_set_ibuton_tag(h_dev, c_remove, c_prefix, &v_tag[0], v_tag.size()) != LPU237_TOOLS_RESULT_SUCCESS)
+					continue;
+			}
 			//
 			b_result = true;
 		} while (false);
@@ -908,6 +931,10 @@ public://exported methods
 			dw_size = m_get_ibuton_remove(h_dev, NULL);
 			if (dw_size == LPU237_TOOLS_RESULT_ERROR)
 				continue;
+			if (dw_size == 0) {
+				b_result = true;
+				continue;
+			}
 			v_tag.resize(dw_size, 0);
 			dw_size = m_get_ibuton_remove(h_dev, &v_tag[0]);
 			if (dw_size == LPU237_TOOLS_RESULT_ERROR)
@@ -925,10 +952,29 @@ public://exported methods
 		do {
 			if (!m_set_ibutton_remove)
 				continue;
-			if (v_tag.empty())
-				continue;
 
-			if (m_set_ibutton_remove(h_dev, &v_tag[0], v_tag.size()) != LPU237_TOOLS_RESULT_SUCCESS)
+			if (v_tag.empty()) {
+				if (m_set_ibutton_remove(h_dev, NULL, v_tag.size()) != LPU237_TOOLS_RESULT_SUCCESS)
+					continue;
+			}
+			else {
+				if (m_set_ibutton_remove(h_dev, &v_tag[0], v_tag.size()) != LPU237_TOOLS_RESULT_SUCCESS)
+					continue;
+			}
+			//
+			b_result = true;
+		} while (false);
+		return b_result;
+	}
+
+	bool set_default(HANDLE h_dev)
+	{
+		bool b_result(false);
+
+		do {
+			if (!m_set_default)
+				continue;
+			if (m_set_default(h_dev) != LPU237_TOOLS_RESULT_SUCCESS)
 				continue;
 			//
 			b_result = true;
@@ -968,7 +1014,7 @@ private:
 
 		m_get_buzzer = nullptr;
 		m_set_buzzer = nullptr;
-		
+
 		m_get_language = nullptr;
 		m_set_language = nullptr;
 
@@ -985,6 +1031,8 @@ private:
 
 		m_get_ibuton_remove = nullptr;
 		m_set_ibutton_remove = nullptr;
+
+		m_set_default = nullptr;
 	}
 
 
@@ -1053,6 +1101,8 @@ private:
 
 	_type_LPU237_tools_msr_get_ibutton_remove_indication_tag m_get_ibuton_remove;
 	_type_LPU237_tools_msr_set_ibutton_remove_indication_tag m_set_ibutton_remove;
+
+	_type_LPU237_tools_msr_set_default m_set_default;
 
 private://don't call these methods
 	cdll_lpu237_tools(const cdll_lpu237_tools&);

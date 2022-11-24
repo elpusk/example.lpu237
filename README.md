@@ -24,6 +24,10 @@ lpu237 device 사용 방법
   - 다른 버전의 dll 이 다수 설치되어 발생하는 dll 지옥을 막아보는 것이 필요한지 검토 필요.
 
 - 변경내용
-  - test_water_lock dialog 실행시, 항상 USB_HID 모드로 표시하는 오류 수정.
-  - 실행 파일과 같은 폴더에 있는 tg_lpu237_ibutton.dll 를 삭제하고, 설치된 mapper 에 있는 tg_lpu237_ibutton.dll를 먼저 사용 하도록 수정.
-  - 설치된 mapper 에 tg_lpu237_tools.dll 가 있으면, 먼저 사용 하도록 수정.
+  - tg_lpu237_tools.dll 에서 interface 변경 저장 안되는 문제 수정.
+  - tg_lpu237_tools.dll 에서 MSR pre/pos 변경 저장 안되는 문제 수정.
+  - tg_lpu237_tools.dll 에 default parameters로 변경하는 함수 추가.( LPU237_tools_msr_set_default() )
+  - tg_lpu237_tools.dll version 0.13 , LPU237_tools_msr_set_default() 함수 추가. log file name prefix를 tools 로 수정.
+  - cmgmt_lpu237 의 set_ibutton_tag() 함수에서 i-button 제거시에 적용되는 pre/postfix 에도 변경하도록 수정.
+    - firmware v3.22, 5.21 부터 i-button 제거시, 적용되는 pre/postfix가 별도록 추가되었으나, 기존 firmware 기반으로 program과 호환성을 위해 이 수정 이루어짐.
+  

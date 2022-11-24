@@ -259,6 +259,11 @@ namespace _exam
 				map_ascii_string['|'] = std::wstring(L"[s][\\]");
 				map_ascii_string['}'] = std::wstring(L"[s][]]");
 				map_ascii_string['~'] = std::wstring(L"[s][`]");
+				map_ascii_string[0x0d] = std::wstring(L"[][enter]");
+				map_ascii_string[0x20] = std::wstring(L"[][space]");
+				map_ascii_string[0x1b] = std::wstring(L"[][esc]");
+				map_ascii_string[0x08] = std::wstring(L"[][bs]");
+				map_ascii_string[0x09] = std::wstring(L"[][tab]");
 			}
 
 			cmgmt_lpu237::_type_map_ascii_string::iterator it = map_ascii_string.find(c_ascii);
@@ -1290,11 +1295,32 @@ namespace _exam
 				if (!tools.set_ibutton_tag(m_h_dev, false, b_prefix, v_tag))
 					continue;
 
+				tools.set_ibutton_tag(m_h_dev, true, b_prefix, v_tag);//no condsideratuin error.
+
 				b_result = true;
 			} while (false);
 			return b_result;
 		}
 
+		bool set_default()
+		{
+			bool b_result(false);
+			std::wstring s_tag;
+
+			do {
+				std::lock_guard<std::mutex> lock(m_mutex_status);
+				if (_chang_status(ev_none).first < st_loaded_parameter)
+					continue;
+				cdll_lpu237_tools& tools(cdll_lpu237_tools::get_instance());
+
+				if (!tools.set_default(m_h_dev))
+					continue;
+
+				b_result = true;
+			} while (false);
+			return b_result;
+
+		}
 		cdll_lpu237_tools::type_list_wstring get_valied_com_port_by_string()
 		{
 			cdll_lpu237_tools::type_list_wstring list_type;
