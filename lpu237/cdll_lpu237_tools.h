@@ -60,6 +60,9 @@ private:
 
 	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_set_default)(HANDLE hDev);
 
+	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_is_support_msr)(HANDLE hDev, BYTE* pc_support);
+	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_is_support_ibutton)(HANDLE hDev, BYTE* pc_support);
+
 public:
 	static cdll_lpu237_tools& get_instance()
 	{
@@ -134,6 +137,9 @@ public:
 
 			m_set_default = reinterpret_cast<_type_LPU237_tools_msr_set_default>(::GetProcAddress(m_h_module, "LPU237_tools_msr_set_default"));
 
+			m_is_support_msr = reinterpret_cast<_type_LPU237_tools_msr_is_support_msr>(::GetProcAddress(m_h_module, "LPU237_tools_msr_is_support_msr"));
+			m_is_support_ibutton = reinterpret_cast<_type_LPU237_tools_msr_is_support_ibutton>(::GetProcAddress(m_h_module, "LPU237_tools_msr_is_support_ibutton"));
+
 			if (!m_on)
 				continue;
 			if (!m_off)
@@ -192,6 +198,10 @@ public:
 			if (!m_set_ibutton_remove)
 				continue;
 			if (!m_set_default)
+				continue;
+			if (!m_is_support_msr)
+				continue;
+			if (!m_is_support_ibutton)
 				continue;
 			//
 			b_result = true;
@@ -982,6 +992,50 @@ public://exported methods
 		return b_result;
 	}
 
+	/**
+	* return : first-result, second - support(true) or not
+	*/
+	cdll_lpu237_tools::type_pair_result_enable is_support_msr(HANDLE h_dev)
+	{
+		bool b_result(false), b_support(false);
+
+		do {
+			if (!m_is_support_msr)
+				continue;
+			unsigned char c_support(0);
+			if (m_is_support_msr(h_dev, &c_support) != LPU237_TOOLS_RESULT_SUCCESS)
+				continue;
+			if (c_support) {
+				b_support = true;
+			}
+
+			b_result = true;
+		} while (false);
+		return std::make_pair(b_result, b_support);
+	}
+
+	/**
+	* return : first-result, second - support(true) or not
+	*/
+	cdll_lpu237_tools::type_pair_result_enable is_support_ibutton(HANDLE h_dev)
+	{
+		bool b_result(false), b_support(false);
+
+		do {
+			if (!m_is_support_ibutton)
+				continue;
+			unsigned char c_support(0);
+			if (m_is_support_ibutton(h_dev, &c_support) != LPU237_TOOLS_RESULT_SUCCESS)
+				continue;
+			if (c_support) {
+				b_support = true;
+			}
+
+			b_result = true;
+		} while (false);
+		return std::make_pair(b_result, b_support);
+	}
+
 private:
 	cdll_lpu237_tools()
 	{
@@ -1033,6 +1087,9 @@ private:
 		m_set_ibutton_remove = nullptr;
 
 		m_set_default = nullptr;
+
+		m_is_support_msr = nullptr;
+		m_is_support_ibutton = nullptr;
 	}
 
 
@@ -1103,6 +1160,9 @@ private:
 	_type_LPU237_tools_msr_set_ibutton_remove_indication_tag m_set_ibutton_remove;
 
 	_type_LPU237_tools_msr_set_default m_set_default;
+
+	_type_LPU237_tools_msr_is_support_msr m_is_support_msr;
+	_type_LPU237_tools_msr_is_support_ibutton m_is_support_ibutton;
 
 private://don't call these methods
 	cdll_lpu237_tools(const cdll_lpu237_tools&);

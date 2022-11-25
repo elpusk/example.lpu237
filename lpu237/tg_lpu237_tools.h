@@ -1,6 +1,7 @@
 #pragma once
 
 /*!
+*   code example is https://github.com/elpusk/example.lpu237
 *	2022.11.	- coding starting.......
 *	2022.11.24 - release v1.0 .  add LPU237_tools_msr_set_default().
 *
@@ -20,11 +21,11 @@
 #define	LPU237_TOOLS_RESULT_SUCCESS		0		//! processing success.
 #define	LPU237_TOOLS_RESULT_ERROR			0xFFFFFFFF	//! processing error.( maybe system or communication error ); (-1)
 #define	LPU237_TOOLS_RESULT_CANCEL			0xFFFFFFFE	//! processing is canceled by another reqest.(-2)
-#define	LPU237_TOOLS_RESULT_TIMEOUT		0xFFFFFFFC	//! processing is timeout.(-4)
+//#define	LPU237_TOOLS_RESULT_TIMEOUT		0xFFFFFFFC	//! processing is timeout.(-4)....... Don't use
 #define	LPU237_TOOLS_RESULT_NO_MSR			0xFFFFFFFb	//! processing not found MSR .(-5)
 
 /*!
-*	windows' message wparam value.
+*	windows' message wparam value
 */
 #define	LPU237_TOOLS_WPARAM_COMPLETE		0	//firmware update complete.
 #define	LPU237_TOOLS_WPARAM_SUCCESS		0	//firmware update complete.
@@ -33,6 +34,7 @@
 #define	LPU237_TOOLS_WPARAM_SECTOR_WRITE	3
 
 #define	LPU237_TOOLS_WPARAM_ERROR			0xFFFF
+
 
 /*!
 *	the callback function type.
@@ -134,6 +136,33 @@ HANDLE WINAPI LPU237_tools_open_w( CONST WCHAR *sDevPath );
 */
 DWORD WINAPI LPU237_tools_close( HANDLE hDev );
 
+/*!
+* function
+*	is supported magnetic card reading.
+*
+* parameters
+*	hDev : [in] device handle( return value of LPU237_tools_open() )
+*	pc_support : [in/out] 1 - be supported, 0 -not be suported
+*
+* return
+*	if success, return LPU237_TOOLS_RESULT_SUCCESS
+*	else return LPU237_TOOLS_RESULT_ERROR
+*/
+DWORD WINAPI LPU237_tools_msr_is_support_msr(HANDLE hDev, BYTE* pc_support);
+
+/*!
+* function
+*	is supported ibutton reading.
+*
+* parameters
+*	hDev : [in] device handle( return value of LPU237_tools_open() )
+*	pc_support : [in/out] 1 - be supported, 0 -not be suported
+*
+* return
+*	if success, return LPU237_TOOLS_RESULT_SUCCESS
+*	else return LPU237_TOOLS_RESULT_ERROR
+*/
+DWORD WINAPI LPU237_tools_msr_is_support_ibutton(HANDLE hDev, BYTE* pc_support);
 
 /*!
 * function

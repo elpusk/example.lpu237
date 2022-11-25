@@ -38,7 +38,20 @@ END_MESSAGE_MAP()
 
 void c_tab_test::OnBnClickedButtonTestWaterLock()
 {
-	c_dlg_test_water_lock dlg;
+	_exam::cmgmt_lpu237& mgmt(_exam::cmgmt_lpu237::get_instance());
 
-	dlg.DoModal();
+	do {
+		if (!mgmt.is_selected_device()) {
+			AfxMessageBox(L" ERROR : not selected device.");
+			continue;
+		}
+		if (!mgmt.is_support_ibutton()) {
+			AfxMessageBox(L" ERROR : the current device dosen't support ibutton-reading");
+			continue;
+		}
+
+		c_dlg_test_water_lock dlg;
+		dlg.DoModal();
+	} while (false);
+
 }

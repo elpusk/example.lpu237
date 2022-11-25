@@ -41,16 +41,27 @@ END_MESSAGE_MAP()
 void c_tab_msr::OnBnClickedButtonMsrConfig()
 {
 	c_dlg_msr_config dlg;
-
 	dlg.DoModal();
 }
 
 
 void c_tab_msr::OnBnClickedButtonMsrSentinels()
 {
-	c_dlg_msr_sentinel dlg;
+	_exam::cmgmt_lpu237& mgmt(_exam::cmgmt_lpu237::get_instance());
 
-	dlg.DoModal();
+	do {
+		if (!mgmt.is_selected_device()) {
+			AfxMessageBox(L" ERROR : not selected device.");
+			continue;
+		}
+		if (!mgmt.is_support_msr()) {
+			AfxMessageBox(L" ERROR : the current device dosen't support MSR-reading");
+			continue;
+		}
+
+		c_dlg_msr_sentinel dlg;
+		dlg.DoModal();
+	} while (false);
 }
 
 

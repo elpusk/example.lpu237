@@ -24,10 +24,8 @@ lpu237 device 사용 방법
   - 다른 버전의 dll 이 다수 설치되어 발생하는 dll 지옥을 막아보는 것이 필요한지 검토 필요.
 
 - 변경내용
-  - tg_lpu237_tools.dll 에서 interface 변경 저장 안되는 문제 수정.
-  - tg_lpu237_tools.dll 에서 MSR pre/pos 변경 저장 안되는 문제 수정.
-  - tg_lpu237_tools.dll 에 default parameters로 변경하는 함수 추가.( LPU237_tools_msr_set_default() )
-  - tg_lpu237_tools.dll version 0.13 , LPU237_tools_msr_set_default() 함수 추가. log file name prefix를 tools 로 수정.
-  - cmgmt_lpu237 의 set_ibutton_tag() 함수에서 i-button 제거시에 적용되는 pre/postfix 에도 변경하도록 수정.
-    - firmware v3.22, 5.21 부터 i-button 제거시, 적용되는 pre/postfix가 별도록 추가되었으나, 기존 firmware 기반으로 program과 호환성을 위해 이 수정 이루어짐.
+  - tg_lpu237_tools.dll 에 msr 과 ibutton 기능을 지원하는지 알아보는 함수 추가. LPU237_tools_msr_is_support_msr() , LPU237_tools_msr_is_support_ibutton().
+  - tg_lpu237_tools.dll v1.0 을 release 하면서 mapper 로 위치를 이동하여, 더 이상 이 프로젝트에 포함되지 않음. 
+  - 여기 있는 tg_lpu237_tools.dll과 동일한 파일에 코드싸인한 것이 mapper installer에 포함되므로 여기있는 tg_lpu237_tools.dll은 배포금지.
+  
   

@@ -897,8 +897,13 @@ namespace _exam
 				if (tools.get_list(list_device) == 0)
 					continue;
 
-				s_path = m_s_dev_path = *list_device.begin();
-				b_result = b_result = true;
+				s_path = *list_device.begin();
+				m_h_dev = tools.open(s_path);
+				if (m_h_dev == INVALID_HANDLE_VALUE)
+					continue;
+
+				m_s_dev_path = s_path;
+				b_result = true;
 
 				_chang_status(ev_select_device);
 			} while (false);
@@ -928,7 +933,6 @@ namespace _exam
 				if (m_status < cmgmt_lpu237::st_select_device) {
 					continue;
 				}
-				m_h_dev = tools.open(m_s_dev_path);
 				if (m_h_dev == INVALID_HANDLE_VALUE)
 					continue;
 
@@ -963,7 +967,6 @@ namespace _exam
 			do {
 				if (_chang_status(ev_none).first < st_loaded_parameter)
 					continue;
-				m_h_dev = tools.open(m_s_dev_path);
 				if (m_h_dev == INVALID_HANDLE_VALUE)
 					continue;
 
@@ -1449,6 +1452,54 @@ namespace _exam
 				m_n_msg = 0;
 				m_v_key.resize(0);
 			} while (false);
+		}
+
+		bool is_selected_device()
+		{
+			bool b_result(false);
+			do {
+				std::lock_guard<std::mutex> lock(m_mutex_status);
+				if (_chang_status(ev_none).first < st_select_device)
+					continue;
+				//
+				b_result = true;
+			} while (false);
+			return b_result;
+		}
+		bool is_support_msr()
+		{
+			bool b_result(false);
+			bool b_support(false);
+			do {
+				std::lock_guard<std::mutex> lock(m_mutex_status);
+				if (_chang_status(ev_none).first < st_select_device)
+					continue;
+				cdll_lpu237_tools& tools(cdll_lpu237_tools::get_instance());
+
+				std::tie(b_result, b_support) = tools.is_support_msr(m_h_dev);
+				if (!b_result)
+					continue;
+
+			} while (false);
+			return b_support;
+		}
+
+		bool is_support_ibutton()
+		{
+			bool b_result(false);
+			bool b_support(false);
+			do {
+				std::lock_guard<std::mutex> lock(m_mutex_status);
+				if (_chang_status(ev_none).first < st_select_device)
+					continue;
+				cdll_lpu237_tools& tools(cdll_lpu237_tools::get_instance());
+
+				std::tie(b_result, b_support) = tools.is_support_ibutton(m_h_dev);
+				if (!b_result)
+					continue;
+
+			} while (false);
+			return b_support;
 		}
 
 	private:
