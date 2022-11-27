@@ -24,8 +24,7 @@ lpu237 device 사용 방법
   - 다른 버전의 dll 이 다수 설치되어 발생하는 dll 지옥을 막아보는 것이 필요한지 검토 필요.
 
 - 변경내용
-  - tg_lpu237_tools.dll 에 msr 과 ibutton 기능을 지원하는지 알아보는 함수 추가. LPU237_tools_msr_is_support_msr() , LPU237_tools_msr_is_support_ibutton().
   - tg_lpu237_tools.dll v1.0 을 release 하면서 mapper 로 위치를 이동하여, 더 이상 이 프로젝트에 포함되지 않음. 
-  - 여기 있는 tg_lpu237_tools.dll과 동일한 파일에 코드싸인한 것이 mapper installer에 포함되므로 여기있는 tg_lpu237_tools.dll은 배포금지.
+  - 테스트용으로 포함 되었던  tg_lpu237_tools.dll과 tg_rom.dll 모두 삭제됨.
   
   
