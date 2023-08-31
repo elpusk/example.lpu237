@@ -24,7 +24,14 @@ lpu237 device 사용 방법
   - 다른 버전의 dll 이 다수 설치되어 발생하는 dll 지옥을 막아보는 것이 필요한지 검토 필요.
 
 - 변경내용
-  - tg_lpu237_tools.dll v1.0 을 release 하면서 mapper 로 위치를 이동하여, 더 이상 이 프로젝트에 포함되지 않음. 
-  - 테스트용으로 포함 되었던  tg_lpu237_tools.dll과 tg_rom.dll 모두 삭제됨.
+  - 2023.09.01
+  - tp_lpu237.exe v1.1
+  - tg_lpu237_tools.dll 테스트 편리성을 위해, tp_lpu237.exe 와 같은 폴더에 tp_lpu237.ini 가 존재하고, "ini" section 에 key name "components_path" 의 value 가 존재하면, 그 값에 정의된 path 애서  tg_lpu237_tools.dll를 로드함.
+```
+; tp_lpu237.ini  예제
+; 현제 폴더에서 tg_lpu237_tools.dll 를 로드.
+[ini]
+components_path = "."
+```
   
   

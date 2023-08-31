@@ -809,6 +809,60 @@ namespace _exam
 				return true;
 		}
 
+		/**
+		* parameter s_path_without_back_slash_tail - L"." or "c:\\some_path" <-withoout back slash_tail ! 
+		*/
+		bool load_dll(const std::wstring & s_path_without_back_slash_tail)
+		{
+			bool b_result(false);
+
+			if (s_path_without_back_slash_tail.empty()) {
+				return load_dll();
+			}
+
+			std::lock_guard<std::mutex> lock(m_mutex_status);
+			cdll_lpu237_tools& tools(cdll_lpu237_tools::get_instance());
+			cdll_lpu237_ibutton& ibutton(cdll_lpu237_ibutton::get_instance());
+			do {
+				if (m_status != cmgmt_lpu237::st_undefined) {
+					b_result = true;
+					continue;
+				}
+				//
+				std::wstring s_dll;
+
+				s_dll = s_path_without_back_slash_tail;
+				s_dll += L"\\tg_lpu237_tools.dll";
+				if (!tools.load(s_dll)) {
+					if (!tools.load(L"tg_lpu237_tools.dll"))//search in current folder.
+						continue;
+				}
+				if (!tools.on())
+					continue;
+				//
+				s_dll = s_path_without_back_slash_tail;
+				s_dll += L"\\tg_lpu237_ibutton.dll";
+				if (!ibutton.load(s_dll)) {
+					if (!ibutton.load(L"tg_lpu237_ibutton.dll"))//search in current folder.
+						continue;
+				}
+				if (!ibutton.on())
+					continue;
+				//
+				b_result = true;
+				_chang_status(ev_load_dll);
+			} while (false);
+
+			if (!b_result) {
+				tools.off();
+				tools.unload();
+				//
+				ibutton.off();
+				ibutton.unload();
+			}
+			return b_result;
+		}
+
 		bool load_dll()
 		{
 			bool b_result(false);

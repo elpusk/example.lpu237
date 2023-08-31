@@ -90,6 +90,9 @@
     <ClInclude Include="..\lpu237\cdll_lpu237_ibutton.h">
       <Filter>lpu237</Filter>
     </ClInclude>
+    <ClInclude Include="ini.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tp_lpu237.cpp">
@@ -138,6 +141,7 @@
     <None Include="res\tplpu237.rc2">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="tp_lpu237.ini" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\tp_lpu237.ico">

@@ -7,8 +7,10 @@
 #include "tp_lpu237.h"
 #include "tp_lpu237Dlg.h"
 #include "afxdialogex.h"
+#include "ini.h"
 
 #include "_exm_mgmt_lpu237.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -78,7 +80,10 @@ BOOL Ctplpu237Dlg::OnInitDialog()
 	_exam::cmgmt_lpu237& mgmt(_exam::cmgmt_lpu237::get_instance());
 
 	do {
-		if (!mgmt.load_dll()) {
+		cini::get_instance().set_module(GetModuleHandle(NULL));
+		cini::get_instance().load_ini_file(std::wstring(), L"tp_lpu237.ini");//load current path tp_lpu237.ini.
+
+		if (!mgmt.load_dll(cini::get_instance().get_component_dll_path_without_back_slash_tail())) {
 			AfxMessageBox(L"component dll isn't.");
 			continue;
 		}
