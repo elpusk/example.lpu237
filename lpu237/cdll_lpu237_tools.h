@@ -415,6 +415,14 @@ public://exported methods
 						list_valied_interface.push_back(L"USB_HID");
 					}
 					break;
+				case LPU237_TOOLS_INF_USBVCOM:
+					if (i == 0) {
+						s_inf = L"USB_VCOM";
+					}
+					else {
+						list_valied_interface.push_back(L"USB_VCOM");
+					}
+					break;
 				case LPU237_TOOLS_INF_UART:
 					if (i == 0) {
 						s_inf = L"RS232";
@@ -459,6 +467,9 @@ public://exported methods
 			else if (s_inf.compare(L"USB_HID") == 0) {
 				c_inf = LPU237_TOOLS_INF_USBHID;
 			}
+			else if (s_inf.compare(L"USB_VCOM") == 0) {
+				c_inf = LPU237_TOOLS_INF_USBVCOM;
+			}
 			else if (s_inf.compare(L"RS232") == 0) {
 				c_inf = LPU237_TOOLS_INF_UART;
 			}
@@ -494,6 +505,9 @@ public://exported methods
 			else if (s_inf.compare(L"USB_HID") == 0) {
 				c_inf = LPU237_TOOLS_INF_USBHID;
 			}
+			else if (s_inf.compare(L"USB_VCOM") == 0) {
+				c_inf = LPU237_TOOLS_INF_USBVCOM;
+			}
 			else if (s_inf.compare(L"RS232") == 0) {
 				c_inf = LPU237_TOOLS_INF_UART;
 			}
@@ -510,6 +524,9 @@ public://exported methods
 				break;
 			case LPU237_TOOLS_INF_USBHID:
 				s_old_inf = L"USB_HID";
+				break;
+			case LPU237_TOOLS_INF_USBVCOM:
+				s_old_inf = L"USB_VCOM";
 				break;
 			case LPU237_TOOLS_INF_UART:
 				s_old_inf = L"RS232";

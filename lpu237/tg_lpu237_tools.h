@@ -4,6 +4,7 @@
 *   code example is https://github.com/elpusk/example.lpu237
 *	2022.11.	- coding starting.......
 *	2022.11.24 - release v1.0 .  add LPU237_tools_msr_set_default().
+*	2023.08.23 - add LPU237_TOOLS_INF_USBVCOM
 *
 */
 #include <Windows.h>
@@ -285,8 +286,9 @@ DWORD WINAPI LPU237_tools_msr_recover_setting( HANDLE hDev );
 DWORD WINAPI LPU237_tools_msr_get_name( HANDLE hDev, BYTE *sName );
 
 
-#define	LPU237_TOOLS_INF_USBKB		0	//system interface is USB keyboard.
+#define	LPU237_TOOLS_INF_USBKB		0	//system interface is USB keyboard.(lpu237s - only support)
 #define	LPU237_TOOLS_INF_USBHID		1	//system interface is USB MSR(generic HID interface).
+#define	LPU237_TOOLS_INF_USBVCOM	2	//system interface is USB virtual COM.(lpu238 - only support)
 #define	LPU237_TOOLS_INF_UART		10	//system interface is uart.
 /*!
 * function

@@ -86,7 +86,7 @@ BOOL c_dlg_test_water_lock::OnInitDialog()
 	pair_result_string = mgmt.set_active_port_type_to_device_but_not_apply_by_string(L"USB_HID");
 	if (pair_result_string.first) {
 		m_s_old_interface = pair_result_string.second;
-		ATLTRACE(L" : changed inf - %s", L"USB_HID");
+		ATLTRACE(L" : changed inf - %s\n", L"USB_HID");
 	}
 
 	//m_static_serial_number;
