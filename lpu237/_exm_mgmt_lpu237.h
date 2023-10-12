@@ -1556,6 +1556,92 @@ namespace _exam
 			return b_support;
 		}
 
+		bool is_support_ibutton_range()
+		{
+			bool b_result(false);
+			bool b_support(false);
+			do {
+				std::lock_guard<std::mutex> lock(m_mutex_status);
+				if (_chang_status(ev_none).first < st_select_device)
+					continue;
+				cdll_lpu237_tools& tools(cdll_lpu237_tools::get_instance());
+
+				std::tie(b_result, b_support) = tools.is_support_ibutton_range(m_h_dev);
+				if (!b_result)
+					continue;
+
+			} while (false);
+			return b_support;
+		}
+
+		bool set_ibutton_start_zero_base_offset_of_range(unsigned char c_offset)
+		{
+			bool b_result(false);
+
+			do {
+				if (c_offset > LPU237_TOOLS_IBUTTON_RANGE_OFFSET_MAX) {
+					continue;
+				}
+
+				std::lock_guard<std::mutex> lock(m_mutex_status);
+				if (_chang_status(ev_none).first < st_loaded_parameter)
+					continue;
+				cdll_lpu237_tools& tools(cdll_lpu237_tools::get_instance());
+
+				b_result = tools.set_ibutton_start_zero_base_offset_of_range(m_h_dev, c_offset);
+			} while (false);
+			return b_result;
+		}
+		bool set_ibutton_end_zero_base_offset_of_range(unsigned char c_offset)
+		{
+			bool b_result(false);
+
+			do {
+				if (c_offset > LPU237_TOOLS_IBUTTON_RANGE_OFFSET_MAX) {
+					continue;
+				}
+
+				std::lock_guard<std::mutex> lock(m_mutex_status);
+				if (_chang_status(ev_none).first < st_loaded_parameter)
+					continue;
+				cdll_lpu237_tools& tools(cdll_lpu237_tools::get_instance());
+
+				b_result = tools.set_ibutton_end_zero_base_offset_of_range(m_h_dev, c_offset);
+			} while (false);
+			return b_result;
+		}
+
+		cdll_lpu237_tools::type_pair_result_uchar get_ibutton_start_zero_base_offset_of_range()
+		{
+			bool b_result(false);
+			unsigned char c_offset(0);
+
+			do {
+				std::lock_guard<std::mutex> lock(m_mutex_status);
+				if (_chang_status(ev_none).first < st_loaded_parameter)
+					continue;
+				cdll_lpu237_tools& tools(cdll_lpu237_tools::get_instance());
+
+				std::tie(b_result, c_offset) = tools.get_ibutton_start_zero_base_offset_of_range(m_h_dev);
+			} while (false);
+			return std::make_pair(b_result, c_offset);
+		}
+		cdll_lpu237_tools::type_pair_result_uchar get_ibutton_end_zero_base_offset_of_range()
+		{
+			bool b_result(false);
+			unsigned char c_offset(0);
+
+			do {
+				std::lock_guard<std::mutex> lock(m_mutex_status);
+				if (_chang_status(ev_none).first < st_loaded_parameter)
+					continue;
+				cdll_lpu237_tools& tools(cdll_lpu237_tools::get_instance());
+
+				std::tie(b_result, c_offset) = tools.get_ibutton_end_zero_base_offset_of_range(m_h_dev);
+			} while (false);
+			return std::make_pair(b_result, c_offset);
+		}
+
 	private:
 		cmgmt_lpu237()
 		{

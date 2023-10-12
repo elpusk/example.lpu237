@@ -9,8 +9,7 @@ lpu237 device 사용 방법
 - 현재 모든 하위 타입에서 소프트웨어적으로 UART interface 가 지원 되는 알 수 있는 방법 없음.(c,d,e type 만 알 수 있음.)
 - 소프트웨어적 방법으로, 프로그램 실행 전에, ibutton 이 연결 또는 제거 상태 인지 구분 불가능. 프로그램 실행 후, 이벤트가 발생하여 ibutton 값을 얻은 후 부터 식별 가능. 
 - MSR test 하기 위해서는 OPOS CCO 설치 필요.
-- 프로그램 실행 시키기 위해서는 mapper full version 설치. 필요.
-
+- 프로그램 실행 시키기 위해서는 [mapper full version](https://github.com/elpusk/public.lpu237.software/tree/main/full/x86) 설치. 필요.
 
 
 ## tp_lpu237 project
@@ -24,9 +23,19 @@ lpu237 device 사용 방법
   - 다른 버전의 dll 이 다수 설치되어 발생하는 dll 지옥을 막아보는 것이 필요한지 검토 필요.
 
 - 변경내용
+  - 2023.10.12
+    - tp_lpu237.exe v1.3
+    - tp_lpu237.exe 에서 사용하는 tg_lpu237_tools.dll 가 v4.1 로 업데이트 되면서, i-button 전송 범위 설정 기능이 추가되어, 이 기능(i-button range) 사용 예제를 tp_lpu237.exe 에 추가해서, v1.3 으로 업데이트.(1.2는 설명이 없는데 lpu238 장비 지원)
+    - i-button range 기능을 사용하기 위해서는, callisto v3.23, ganymede v5.22 또는 europa v1.1 펨웨어가 탑재된, i-button 읽기 기능을 가진 장비가 있어야 함.
+    - tg_lpu237_tools.dll v4.1 에 LPU237_tools_msr_is_support_ibutton_range() 함수 추가 :  i-button range 기능 지원 여부 확인을 위해. 단 i-button 기능 지원 여부는 LPU237_tools_msr_is_support_ibutton() 를 계속 사용해야 함.
+    - tg_lpu237_tools.dll v4.1 에 LPU237_tools_msr_get_ibutton_start_zero_base_offset_of_range() 함수 추가 :  i-button range 기능에서 현재 range 시작 offset 얻기 위해.
+    - tg_lpu237_tools.dll v4.1 에 LPU237_tools_msr_get_ibutton_end_zero_base_offset_of_range() 함수 추가 :  i-button range 기능에서 현재 range 종료 offset 얻기 위해.
+    - tg_lpu237_tools.dll v4.1 에 LPU237_tools_msr_set_ibutton_start_zero_base_offset_of_range() 함수 추가 :  i-button range 기능에서 range 시작 offset 설정 위해.
+    - tg_lpu237_tools.dll v4.1 에 LPU237_tools_msr_set_ibutton_end_zero_base_offset_of_range() 함수 추가 :  i-button range 기능에서 range 종료 offset 설정 위해.
+    
   - 2023.09.01
-  - tp_lpu237.exe v1.1
-  - tg_lpu237_tools.dll 테스트 편리성을 위해, tp_lpu237.exe 와 같은 폴더에 tp_lpu237.ini 가 존재하고, "ini" section 에 key name "components_path" 의 value 가 존재하면, 그 값에 정의된 path 애서  tg_lpu237_tools.dll를 로드함.
+    - tp_lpu237.exe v1.1
+    - tg_lpu237_tools.dll 테스트 편리성을 위해, tp_lpu237.exe 와 같은 폴더에 tp_lpu237.ini 가 존재하고, "ini" section 에 key name "components_path" 의 value 가 존재하면, 그 값에 정의된 path 애서  tg_lpu237_tools.dll를 로드함.
 ```
 ; tp_lpu237.ini  예제
 ; 현제 폴더에서 tg_lpu237_tools.dll 를 로드.

@@ -17,6 +17,7 @@ public:
 	typedef	std::shared_ptr<cdll_lpu237_tools>	type_ptr;
 	typedef	std::pair<bool, bool> type_pair_result_enable;
 	typedef	std::pair<bool, std::wstring> type_pair_result_string;
+	typedef	std::pair<bool, unsigned char> type_pair_result_uchar;
 	typedef	std::vector<unsigned char>	type_v_tag;
 
 private:
@@ -62,6 +63,13 @@ private:
 
 	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_is_support_msr)(HANDLE hDev, BYTE* pc_support);
 	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_is_support_ibutton)(HANDLE hDev, BYTE* pc_support);
+
+	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_get_ibutton_start_zero_base_offset_of_range)(HANDLE hDev, BYTE* pc_zero_base_index);
+	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_set_ibutton_start_zero_base_offset_of_range)(HANDLE hDev, BYTE c_zero_base_index);
+	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_get_ibutton_end_zero_base_offset_of_range)(HANDLE hDev, BYTE* pc_zero_base_index);
+	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_set_ibutton_end_zero_base_offset_of_range)(HANDLE hDev, BYTE c_zero_base_index);
+	typedef	DWORD(__stdcall* _type_LPU237_tools_msr_is_support_ibutton_range)(HANDLE hDev, BYTE* pc_support);
+
 
 public:
 	static cdll_lpu237_tools& get_instance()
@@ -140,6 +148,12 @@ public:
 			m_is_support_msr = reinterpret_cast<_type_LPU237_tools_msr_is_support_msr>(::GetProcAddress(m_h_module, "LPU237_tools_msr_is_support_msr"));
 			m_is_support_ibutton = reinterpret_cast<_type_LPU237_tools_msr_is_support_ibutton>(::GetProcAddress(m_h_module, "LPU237_tools_msr_is_support_ibutton"));
 
+			m_get_ibutton_start_zero_base_offset_of_range = reinterpret_cast<_type_LPU237_tools_msr_get_ibutton_start_zero_base_offset_of_range>(::GetProcAddress(m_h_module, "LPU237_tools_msr_get_ibutton_start_zero_base_offset_of_range"));
+			m_set_ibutton_start_zero_base_offset_of_range = reinterpret_cast<_type_LPU237_tools_msr_set_ibutton_start_zero_base_offset_of_range>(::GetProcAddress(m_h_module, "LPU237_tools_msr_set_ibutton_start_zero_base_offset_of_range"));
+			m_get_ibutton_end_zero_base_offset_of_range = reinterpret_cast<_type_LPU237_tools_msr_get_ibutton_end_zero_base_offset_of_range>(::GetProcAddress(m_h_module, "LPU237_tools_msr_get_ibutton_end_zero_base_offset_of_range"));
+			m_set_ibutton_end_zero_base_offset_of_range = reinterpret_cast<_type_LPU237_tools_msr_set_ibutton_end_zero_base_offset_of_range>(::GetProcAddress(m_h_module, "LPU237_tools_msr_set_ibutton_end_zero_base_offset_of_range"));
+			m_is_support_ibutton_range = reinterpret_cast<_type_LPU237_tools_msr_is_support_ibutton_range>(::GetProcAddress(m_h_module, "LPU237_tools_msr_is_support_ibutton_range"));
+
 			if (!m_on)
 				continue;
 			if (!m_off)
@@ -202,6 +216,16 @@ public:
 			if (!m_is_support_msr)
 				continue;
 			if (!m_is_support_ibutton)
+				continue;
+			if (!m_get_ibutton_start_zero_base_offset_of_range)
+				continue;
+			if (!m_set_ibutton_start_zero_base_offset_of_range)
+				continue;
+			if (!m_get_ibutton_end_zero_base_offset_of_range)
+				continue;
+			if (!m_set_ibutton_end_zero_base_offset_of_range)
+				continue;
+			if (!m_is_support_ibutton_range)
 				continue;
 			//
 			b_result = true;
@@ -1053,6 +1077,92 @@ public://exported methods
 		return std::make_pair(b_result, b_support);
 	}
 
+	cdll_lpu237_tools::type_pair_result_uchar get_ibutton_start_zero_base_offset_of_range(HANDLE h_dev)
+	{
+		bool b_result(false);
+		unsigned char c_offset(0);
+
+		do {
+			if (!m_get_ibutton_start_zero_base_offset_of_range)
+				continue;
+			if (m_get_ibutton_start_zero_base_offset_of_range(h_dev, &c_offset) != LPU237_TOOLS_RESULT_SUCCESS)
+				continue;
+			//
+			b_result = true;
+		} while (false);
+		return std::make_pair(b_result, c_offset);
+	}
+	cdll_lpu237_tools::type_pair_result_uchar get_ibutton_end_zero_base_offset_of_range(HANDLE h_dev)
+	{
+		bool b_result(false);
+		unsigned char c_offset(0);
+
+		do {
+			if (!m_get_ibutton_end_zero_base_offset_of_range)
+				continue;
+			if (m_get_ibutton_end_zero_base_offset_of_range(h_dev, &c_offset) != LPU237_TOOLS_RESULT_SUCCESS)
+				continue;
+			//
+			b_result = true;
+		} while (false);
+		return std::make_pair(b_result, c_offset);
+	}
+
+	bool set_ibutton_start_zero_base_offset_of_range(HANDLE h_dev, unsigned char c_offset)
+	{
+		bool b_result(false);
+
+		do {
+			if (c_offset > 15)
+				continue;
+			if (!m_set_ibutton_start_zero_base_offset_of_range)
+				continue;
+			if (m_set_ibutton_start_zero_base_offset_of_range(h_dev, c_offset) != LPU237_TOOLS_RESULT_SUCCESS)
+				continue;
+			//
+			b_result = true;
+		} while (false);
+		return b_result;
+	}
+	bool set_ibutton_end_zero_base_offset_of_range(HANDLE h_dev, unsigned char c_offset)
+	{
+		bool b_result(false);
+
+		do {
+			if (c_offset > 15)
+				continue;
+			if (!m_set_ibutton_end_zero_base_offset_of_range)
+				continue;
+			if (m_set_ibutton_end_zero_base_offset_of_range(h_dev, c_offset) != LPU237_TOOLS_RESULT_SUCCESS)
+				continue;
+			//
+			b_result = true;
+		} while (false);
+		return b_result;
+	}
+	/**
+	* return : first-result, second - support(true) or not
+	*/
+	cdll_lpu237_tools::type_pair_result_enable is_support_ibutton_range(HANDLE h_dev)
+	{
+		bool b_result(false), b_support(false);
+
+		do {
+			if (!m_is_support_ibutton_range)
+				continue;
+			unsigned char c_support(0);
+			if (m_is_support_ibutton_range(h_dev, &c_support) != LPU237_TOOLS_RESULT_SUCCESS)
+				continue;
+			if (c_support) {
+				b_support = true;
+			}
+
+			b_result = true;
+		} while (false);
+		return std::make_pair(b_result, b_support);
+	}
+
+
 private:
 	cdll_lpu237_tools()
 	{
@@ -1107,6 +1217,12 @@ private:
 
 		m_is_support_msr = nullptr;
 		m_is_support_ibutton = nullptr;
+
+		m_get_ibutton_start_zero_base_offset_of_range = nullptr;
+		m_set_ibutton_start_zero_base_offset_of_range = nullptr;
+		m_get_ibutton_end_zero_base_offset_of_range = nullptr;
+		m_set_ibutton_end_zero_base_offset_of_range = nullptr;
+		m_is_support_ibutton_range = nullptr;
 	}
 
 
@@ -1180,6 +1296,12 @@ private:
 
 	_type_LPU237_tools_msr_is_support_msr m_is_support_msr;
 	_type_LPU237_tools_msr_is_support_ibutton m_is_support_ibutton;
+
+	_type_LPU237_tools_msr_get_ibutton_start_zero_base_offset_of_range m_get_ibutton_start_zero_base_offset_of_range;
+	_type_LPU237_tools_msr_set_ibutton_start_zero_base_offset_of_range m_set_ibutton_start_zero_base_offset_of_range;
+	_type_LPU237_tools_msr_get_ibutton_end_zero_base_offset_of_range m_get_ibutton_end_zero_base_offset_of_range;
+	_type_LPU237_tools_msr_set_ibutton_end_zero_base_offset_of_range m_set_ibutton_end_zero_base_offset_of_range;
+	_type_LPU237_tools_msr_is_support_ibutton_range m_is_support_ibutton_range;
 
 private://don't call these methods
 	cdll_lpu237_tools(const cdll_lpu237_tools&);

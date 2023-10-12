@@ -5,6 +5,7 @@
 *	2022.11.	- coding starting.......
 *	2022.11.24 - release v1.0 .  add LPU237_tools_msr_set_default().
 *	2023.08.23 - add LPU237_TOOLS_INF_USBVCOM
+*	2023.10.12 - release 4.1. supports i-button range.( from callisto v3.23, ganymede v5.22 and europa v1.1 )
 *
 */
 #include <Windows.h>
@@ -15,6 +16,8 @@
 #define	LPU237_TOOLS_SIZE_ID				16			//device ID is 16 bytes.
 #define	LPU237_TOOLS_SIZE_NAME				16			//device Name is 16 bytes.
 #define	LPU237_TOOLS_SIZE_VERSION			4			//firmware version is 4 bytes.
+#define	LPU237_TOOLS_IBUTTON_RANGE_OFFSET_MIN	0		//the minimum offset of i-button range.(from v4.1)
+#define	LPU237_TOOLS_IBUTTON_RANGE_OFFSET_MAX	15		//the maximum offset of i-button range.(from v4.1)
 
 /*!
 *	return value definition.
@@ -40,13 +43,13 @@
 /*!
 *	the callback function type.
 *	this type will be used in LPU237_tools_msr_update()
-*	
+*
 *	parameters
 *		1'st - user defined data.
 *		2'nd - current processing result : LPU237_TOOLS_RESULT_x
 *		3'th - LPU237_TOOLS_WPARAM_x.
 */
-typedef	DWORD (WINAPI *type_lpu237_tools_callback)(void*,DWORD,DWORD);
+typedef	DWORD(WINAPI* type_lpu237_tools_callback)(void*, DWORD, DWORD);
 
 /*!
 *	the callback function type.
@@ -69,7 +72,7 @@ typedef	DWORD(WINAPI* type_lpu237_tools_callback_get_parameter)(void*, DWORD, DW
 *		2'nd - current processing result : LPU237_TOOLS_RESULT_x
 *		3'th - currnent step index : zero-base index.
 *		4'th - the total step : step index >= 0 and step index < this value
-*		5'th - reserved value 
+*		5'th - reserved value
 */
 typedef	DWORD(WINAPI* type_lpu237_tools_callback_set_parameter)(void*, DWORD, DWORD, DWORD, DWORD);
 
@@ -102,27 +105,27 @@ DWORD WINAPI LPU237_tools_off();
 *	get connected device list.( unicode version )
 *
 * parameters
-*	ssDevPaths : [in/out] Multi string of devices paths. 
+*	ssDevPaths : [in/out] Multi string of devices paths.
 *					this value can be NULL(0).
 *
 *	return
 *		if ssDevPaths = NULL, the number of character.(including NULL). one character size = 2 bytes
 *		else the number of connected lpu237 device.
 */
-DWORD WINAPI LPU237_tools_get_list_w( WCHAR *ssDevPaths );
+DWORD WINAPI LPU237_tools_get_list_w(WCHAR* ssDevPaths);
 
 /*!
-* function 
+* function
 *	open device.( unicode version )
 *
 * parameters
 *	sDevPath : [in] device path - unicode type zero-string
 *
-* return 
+* return
 *	if success, return device handle.
 *	else return INVALID_HANDLE_VALUE
 */
-HANDLE WINAPI LPU237_tools_open_w( CONST WCHAR *sDevPath );
+HANDLE WINAPI LPU237_tools_open_w(CONST WCHAR* sDevPath);
 
 /*!
 * function
@@ -135,7 +138,7 @@ HANDLE WINAPI LPU237_tools_open_w( CONST WCHAR *sDevPath );
 *	if success, return LPU237_TOOLS_RESULT_SUCCESS
 *	else return LPU237_TOOLS_RESULT_ERROR
 */
-DWORD WINAPI LPU237_tools_close( HANDLE hDev );
+DWORD WINAPI LPU237_tools_close(HANDLE hDev);
 
 /*!
 * function
@@ -254,7 +257,7 @@ DWORD WINAPI LPU237_tools_msr_start_set_setting_except_combination(const BYTE* s
 *	if success, return LPU237_TOOLS_RESULT_SUCCESS
 *	else return LPU237_TOOLS_RESULT_ERROR
 */
-DWORD WINAPI LPU237_tools_msr_save_setting( HANDLE hDev );
+DWORD WINAPI LPU237_tools_msr_save_setting(HANDLE hDev);
 
 /*!
 * function
@@ -268,7 +271,7 @@ DWORD WINAPI LPU237_tools_msr_save_setting( HANDLE hDev );
 *	if success, return LPU237_TOOLS_RESULT_SUCCESS
 *	else return LPU237_TOOLS_RESULT_ERROR
 */
-DWORD WINAPI LPU237_tools_msr_recover_setting( HANDLE hDev );
+DWORD WINAPI LPU237_tools_msr_recover_setting(HANDLE hDev);
 
 /*!
 * function
@@ -279,11 +282,11 @@ DWORD WINAPI LPU237_tools_msr_recover_setting( HANDLE hDev );
 *	sName : [in/out] A pointer to the buffer that save the device name.
 *			this value can be NULL(0).
 *
-* return 
+* return
 * 	if error, return LPU237_TOOLS_RESULT_ERROR
 *	else the size of internal name.[unit byte]
 */
-DWORD WINAPI LPU237_tools_msr_get_name( HANDLE hDev, BYTE *sName );
+DWORD WINAPI LPU237_tools_msr_get_name(HANDLE hDev, BYTE* sName);
 
 
 #define	LPU237_TOOLS_INF_USBKB		0	//system interface is USB keyboard.(lpu237s - only support)
@@ -301,7 +304,7 @@ DWORD WINAPI LPU237_tools_msr_get_name( HANDLE hDev, BYTE *sName );
 *
 * return
 * 	if error, return LPU237_TOOLS_RESULT_ERROR
-*	else the number of interface +1 
+*	else the number of interface +1
 */
 DWORD WINAPI LPU237_tools_msr_get_active_and_valied_interface(HANDLE hDev, BYTE* s_inteface);
 
@@ -563,7 +566,7 @@ DWORD WINAPI LPU237_tools_msr_get_ibutton_remove_indication_tag(HANDLE hDev, BYT
 *	hDev : [in] device handle( return value of LPU237_tools_open() )
 *	s_tag : [in] A pointer to the buffer that save the tag.
 *	dw_tag : the size of s_tag
-* 
+*
 * return
 * 	if error, return LPU237_TOOLS_RESULT_ERROR
 *	else LPU237_TOOLS_RESULT_SUCCESS
@@ -593,11 +596,11 @@ DWORD WINAPI LPU237_tools_msr_set_default(HANDLE hDev);
 *	sName : [in/out] A pointer to the buffer that save the device firmware version.( version 4 bytes )
 *			this value can be NULL(0).
 *
-* return 
+* return
 * 	if error, return LPU237_TOOLS_RESULT_ERROR
 *	else the size of version.[unit byte]
 */
-DWORD WINAPI LPU237_tools_msr_get_version( HANDLE hDev, BYTE *sVersion );
+DWORD WINAPI LPU237_tools_msr_get_version(HANDLE hDev, BYTE* sVersion);
 
 /*!
 * function
@@ -607,11 +610,11 @@ DWORD WINAPI LPU237_tools_msr_get_version( HANDLE hDev, BYTE *sVersion );
 *	sVersion : [in] device firmware version( return value of LPU237_tools_msr_get_version() ).
 *			this value can be NULL(0).
 *
-* return 
+* return
 * 	if error, return LPU237_TOOLS_RESULT_ERROR
 *	else major version number.
 */
-DWORD WINAPI LPU237_tools_msr_get_version_major( const BYTE *sVersion );
+DWORD WINAPI LPU237_tools_msr_get_version_major(const BYTE* sVersion);
 
 /*!
 * function
@@ -621,11 +624,11 @@ DWORD WINAPI LPU237_tools_msr_get_version_major( const BYTE *sVersion );
 *	sVersion : [in] device firmware version( return value of LPU237_tools_msr_get_version() ).
 *			this value can be NULL(0).
 *
-* return 
+* return
 * 	if error, return LPU237_TOOLS_RESULT_ERROR
 *	else minor version number.
 */
-DWORD WINAPI LPU237_tools_msr_get_version_minor( const BYTE *sVersion );
+DWORD WINAPI LPU237_tools_msr_get_version_minor(const BYTE* sVersion);
 
 /*!
 * function
@@ -639,3 +642,76 @@ DWORD WINAPI LPU237_tools_msr_get_version_minor( const BYTE *sVersion );
 *
 */
 DWORD WINAPI LPU237_tools_msr_cancel();
+
+/*!
+* function
+*	get the starting offset of i-button key range.
+*
+* parameters
+*	hDev : [in] device handle( return value of LPU237_tools_open() )
+*	pc_offset : [in/out] A pointer to unsigned char buffer. offset( 0~ 15 )
+*			this value cannot be NULL(0).
+*
+* return
+* 	if error, return LPU237_TOOLS_RESULT_ERROR
+*	else LPU237_TOOLS_RESULT_SUCCESS
+*/
+DWORD WINAPI LPU237_tools_msr_get_ibutton_start_zero_base_offset_of_range(HANDLE hDev, BYTE* pc_offset);
+
+/*!
+* function
+*	set the starting offset of i-button key range.
+*
+* parameters
+*	hDev : [in] device handle( return value of LPU237_tools_open() )
+*	c_offset : [in] unsigned char buffer. offset( 0~ 15 )
+*
+* return
+* 	if error, return LPU237_TOOLS_RESULT_ERROR
+*	else LPU237_TOOLS_RESULT_SUCCESS
+*/
+DWORD WINAPI LPU237_tools_msr_set_ibutton_start_zero_base_offset_of_range(HANDLE hDev, BYTE c_offset);
+
+
+/*!
+* function
+*	get the ending offset of i-button key range.
+*
+* parameters
+*	hDev : [in] device handle( return value of LPU237_tools_open() )
+*	pc_offset : [in/out] A pointer to unsigned char buffer. offset( 0~ 15 )
+*			this value cannot be NULL(0).
+*
+* return
+* 	if error, return LPU237_TOOLS_RESULT_ERROR
+*	else LPU237_TOOLS_RESULT_SUCCESS
+*/
+DWORD WINAPI LPU237_tools_msr_get_ibutton_end_zero_base_offset_of_range(HANDLE hDev, BYTE* pc_offset);
+
+/*!
+* function
+*	set the ending offset of i-button key range.
+*
+* parameters
+*	hDev : [in] device handle( return value of LPU237_tools_open() )
+*	c_offset : [in] unsigned char buffer. offset( 0~ 15 )
+*
+* return
+* 	if error, return LPU237_TOOLS_RESULT_ERROR
+*	else LPU237_TOOLS_RESULT_SUCCESS
+*/
+DWORD WINAPI LPU237_tools_msr_set_ibutton_end_zero_base_offset_of_range(HANDLE hDev, BYTE c_offset);
+
+/*!
+* function
+*	is supported ibutton range.
+*
+* parameters
+*	hDev : [in] device handle( return value of LPU237_tools_open() )
+*	pc_support : [in/out] 1 - be supported, 0 -not be suported
+*
+* return
+*	if success, return LPU237_TOOLS_RESULT_SUCCESS
+*	else return LPU237_TOOLS_RESULT_ERROR
+*/
+DWORD WINAPI LPU237_tools_msr_is_support_ibutton_range(HANDLE hDev, BYTE* pc_support);

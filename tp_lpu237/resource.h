@@ -42,6 +42,9 @@
 #define IDC_PROGRESS_PROCESS            1019
 #define IDC_EDIT_PORT_TYPE              1020
 #define IDC_EDIT_INTERFACE_PORT         1021
+#define IDC_COMBO_START                 1022
+#define IDC_COMBO2                      1023
+#define IDC_COMBO_END                   1023
 
 // Next default values for new objects
 // 
@@ -49,7 +52,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        146
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1020
+#define _APS_NEXT_CONTROL_VALUE         1023
 #define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif

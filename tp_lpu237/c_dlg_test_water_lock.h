@@ -41,4 +41,8 @@ public:
 	afx_msg void OnClose();
 	afx_msg void OnBnClickedCancel();
 	afx_msg void OnBnClickedOk();
+	CComboBox m_combo_start;
+	CComboBox m_combo_end;
+	afx_msg void OnCbnSelchangeComboStart();
+	afx_msg void OnCbnSelchangeComboEnd();
 };

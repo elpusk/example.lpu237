@@ -31,6 +31,8 @@ void c_dlg_test_water_lock::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_END_SENTINEL, m_edit_stop_sentinel);
 	DDX_Control(pDX, IDC_EDIT_PORT_TYPE, m_edit_port_type);
 	DDX_Control(pDX, IDC_EDIT_INTERFACE_PORT, m_edit_interface_port);
+	DDX_Control(pDX, IDC_COMBO_START, m_combo_start);
+	DDX_Control(pDX, IDC_COMBO_END, m_combo_end);
 }
 
 
@@ -40,6 +42,8 @@ BEGIN_MESSAGE_MAP(c_dlg_test_water_lock, CDialogEx)
 	ON_BN_CLICKED(IDCANCEL, &c_dlg_test_water_lock::OnBnClickedCancel)
 	ON_BN_CLICKED(IDOK, &c_dlg_test_water_lock::OnBnClickedOk)
 	ON_MESSAGE(_exam::const_wnd_msg_get_ibutton, &c_dlg_test_water_lock::on_get_ibutton)
+	ON_CBN_SELCHANGE(IDC_COMBO_START, &c_dlg_test_water_lock::OnCbnSelchangeComboStart)
+	ON_CBN_SELCHANGE(IDC_COMBO_END, &c_dlg_test_water_lock::OnCbnSelchangeComboEnd)
 END_MESSAGE_MAP()
 
 
@@ -114,6 +118,24 @@ BOOL c_dlg_test_water_lock::OnInitDialog()
 	m_edit_interface_port.SetWindowText(mgmt.get_com_port_by_string().c_str());
 	
 	//
+	m_combo_start.ResetContent();
+	m_combo_end.ResetContent();
+	for (int i = LPU237_TOOLS_IBUTTON_RANGE_OFFSET_MIN; i <= LPU237_TOOLS_IBUTTON_RANGE_OFFSET_MAX; i++) {
+		m_combo_start.AddString(std::to_wstring(i).c_str());
+		m_combo_end.AddString(std::to_wstring(i).c_str());
+	}//end for
+
+	if (mgmt.is_support_ibutton_range()) {
+		m_combo_start.SetCurSel(mgmt.get_ibutton_start_zero_base_offset_of_range().second);
+		m_combo_end.SetCurSel(mgmt.get_ibutton_end_zero_base_offset_of_range().second);
+
+		GetDlgItem(IDC_COMBO_START)->EnableWindow();
+		GetDlgItem(IDC_COMBO_END)->EnableWindow();
+	}
+	else {
+		GetDlgItem(IDC_COMBO_START)->EnableWindow(FALSE);
+		GetDlgItem(IDC_COMBO_END)->EnableWindow(FALSE);
+	}
 
 
 	//start ibutton test
@@ -234,5 +256,35 @@ void c_dlg_test_water_lock::OnBnClickedOk()
 			}
 		}
 		CDialogEx::OnOK();
+	}
+}
+
+
+void c_dlg_test_water_lock::OnCbnSelchangeComboStart()
+{
+	int n_s(m_combo_start.GetCurSel());
+	int n_e(m_combo_end.GetCurSel());
+	if (n_s > n_e) {
+		m_combo_start.SetCurSel(n_e);
+	}
+
+	_exam::cmgmt_lpu237& mgmt(_exam::cmgmt_lpu237::get_instance());
+	if (mgmt.is_loaded_parameter()) {
+		mgmt.set_ibutton_start_zero_base_offset_of_range((unsigned char)m_combo_start.GetCurSel());
+	}
+}
+
+
+void c_dlg_test_water_lock::OnCbnSelchangeComboEnd()
+{
+	int n_s(m_combo_start.GetCurSel());
+	int n_e(m_combo_end.GetCurSel());
+	if (n_s > n_e) {
+		m_combo_end.SetCurSel(n_s);
+	}
+
+	_exam::cmgmt_lpu237& mgmt(_exam::cmgmt_lpu237::get_instance());
+	if (mgmt.is_loaded_parameter()) {
+		mgmt.set_ibutton_end_zero_base_offset_of_range((unsigned char)m_combo_end.GetCurSel());
 	}
 }
