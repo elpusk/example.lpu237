@@ -23,6 +23,8 @@ lpu237 device 사용 방법
   - 다른 버전의 dll 이 다수 설치되어 발생하는 dll 지옥을 막아보는 것이 필요한지 검토 필요.
 
 - 변경내용
+  - 2026.09.22
+    - tg_lpu237_tools.dll 와 tg_lpu237_ibutton.dll 가 v5.1 로 업데이트 되어, tg_lpu237.exe v1.4 업데이트해서 빌드. 
   - 2023.10.12
     - tp_lpu237.exe v1.3
     - tp_lpu237.exe 에서 사용하는 tg_lpu237_tools.dll 가 v4.1 로 업데이트 되면서, i-button 전송 범위 설정 기능이 추가되어, 이 기능(i-button range) 사용 예제를 tp_lpu237.exe 에 추가해서, v1.3 으로 업데이트.(1.2는 설명이 없는데 lpu238 장비 지원)
