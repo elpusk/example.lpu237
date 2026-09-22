@@ -1108,7 +1108,7 @@ public://exported methods
 		return std::make_pair(b_result, c_offset);
 	}
 
-	bool set_ibutton_start_zero_base_offset_of_range(HANDLE h_dev, unsigned char c_offset)
+	bool set_ibutton_start_zero_base_offset_of_range(HANDLE h_dev,unsigned char c_offset)
 	{
 		bool b_result(false);
 

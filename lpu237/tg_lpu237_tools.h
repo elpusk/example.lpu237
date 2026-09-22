@@ -43,13 +43,13 @@
 /*!
 *	the callback function type.
 *	this type will be used in LPU237_tools_msr_update()
-*
+*	
 *	parameters
 *		1'st - user defined data.
 *		2'nd - current processing result : LPU237_TOOLS_RESULT_x
 *		3'th - LPU237_TOOLS_WPARAM_x.
 */
-typedef	DWORD(WINAPI* type_lpu237_tools_callback)(void*, DWORD, DWORD);
+typedef	DWORD (WINAPI *type_lpu237_tools_callback)(void*,DWORD,DWORD);
 
 /*!
 *	the callback function type.
@@ -72,7 +72,7 @@ typedef	DWORD(WINAPI* type_lpu237_tools_callback_get_parameter)(void*, DWORD, DW
 *		2'nd - current processing result : LPU237_TOOLS_RESULT_x
 *		3'th - currnent step index : zero-base index.
 *		4'th - the total step : step index >= 0 and step index < this value
-*		5'th - reserved value
+*		5'th - reserved value 
 */
 typedef	DWORD(WINAPI* type_lpu237_tools_callback_set_parameter)(void*, DWORD, DWORD, DWORD, DWORD);
 
@@ -105,27 +105,27 @@ DWORD WINAPI LPU237_tools_off();
 *	get connected device list.( unicode version )
 *
 * parameters
-*	ssDevPaths : [in/out] Multi string of devices paths.
+*	ssDevPaths : [in/out] Multi string of devices paths. 
 *					this value can be NULL(0).
 *
 *	return
 *		if ssDevPaths = NULL, the number of character.(including NULL). one character size = 2 bytes
 *		else the number of connected lpu237 device.
 */
-DWORD WINAPI LPU237_tools_get_list_w(WCHAR* ssDevPaths);
+DWORD WINAPI LPU237_tools_get_list_w( WCHAR *ssDevPaths );
 
 /*!
-* function
+* function 
 *	open device.( unicode version )
 *
 * parameters
 *	sDevPath : [in] device path - unicode type zero-string
 *
-* return
+* return 
 *	if success, return device handle.
 *	else return INVALID_HANDLE_VALUE
 */
-HANDLE WINAPI LPU237_tools_open_w(CONST WCHAR* sDevPath);
+HANDLE WINAPI LPU237_tools_open_w( CONST WCHAR *sDevPath );
 
 /*!
 * function
@@ -138,7 +138,7 @@ HANDLE WINAPI LPU237_tools_open_w(CONST WCHAR* sDevPath);
 *	if success, return LPU237_TOOLS_RESULT_SUCCESS
 *	else return LPU237_TOOLS_RESULT_ERROR
 */
-DWORD WINAPI LPU237_tools_close(HANDLE hDev);
+DWORD WINAPI LPU237_tools_close( HANDLE hDev );
 
 /*!
 * function
@@ -257,7 +257,7 @@ DWORD WINAPI LPU237_tools_msr_start_set_setting_except_combination(const BYTE* s
 *	if success, return LPU237_TOOLS_RESULT_SUCCESS
 *	else return LPU237_TOOLS_RESULT_ERROR
 */
-DWORD WINAPI LPU237_tools_msr_save_setting(HANDLE hDev);
+DWORD WINAPI LPU237_tools_msr_save_setting( HANDLE hDev );
 
 /*!
 * function
@@ -271,7 +271,7 @@ DWORD WINAPI LPU237_tools_msr_save_setting(HANDLE hDev);
 *	if success, return LPU237_TOOLS_RESULT_SUCCESS
 *	else return LPU237_TOOLS_RESULT_ERROR
 */
-DWORD WINAPI LPU237_tools_msr_recover_setting(HANDLE hDev);
+DWORD WINAPI LPU237_tools_msr_recover_setting( HANDLE hDev );
 
 /*!
 * function
@@ -282,11 +282,11 @@ DWORD WINAPI LPU237_tools_msr_recover_setting(HANDLE hDev);
 *	sName : [in/out] A pointer to the buffer that save the device name.
 *			this value can be NULL(0).
 *
-* return
+* return 
 * 	if error, return LPU237_TOOLS_RESULT_ERROR
 *	else the size of internal name.[unit byte]
 */
-DWORD WINAPI LPU237_tools_msr_get_name(HANDLE hDev, BYTE* sName);
+DWORD WINAPI LPU237_tools_msr_get_name( HANDLE hDev, BYTE *sName );
 
 
 #define	LPU237_TOOLS_INF_USBKB		0	//system interface is USB keyboard.(lpu237s - only support)
@@ -304,7 +304,7 @@ DWORD WINAPI LPU237_tools_msr_get_name(HANDLE hDev, BYTE* sName);
 *
 * return
 * 	if error, return LPU237_TOOLS_RESULT_ERROR
-*	else the number of interface +1
+*	else the number of interface +1 
 */
 DWORD WINAPI LPU237_tools_msr_get_active_and_valied_interface(HANDLE hDev, BYTE* s_inteface);
 
@@ -566,7 +566,7 @@ DWORD WINAPI LPU237_tools_msr_get_ibutton_remove_indication_tag(HANDLE hDev, BYT
 *	hDev : [in] device handle( return value of LPU237_tools_open() )
 *	s_tag : [in] A pointer to the buffer that save the tag.
 *	dw_tag : the size of s_tag
-*
+* 
 * return
 * 	if error, return LPU237_TOOLS_RESULT_ERROR
 *	else LPU237_TOOLS_RESULT_SUCCESS
@@ -596,11 +596,11 @@ DWORD WINAPI LPU237_tools_msr_set_default(HANDLE hDev);
 *	sName : [in/out] A pointer to the buffer that save the device firmware version.( version 4 bytes )
 *			this value can be NULL(0).
 *
-* return
+* return 
 * 	if error, return LPU237_TOOLS_RESULT_ERROR
 *	else the size of version.[unit byte]
 */
-DWORD WINAPI LPU237_tools_msr_get_version(HANDLE hDev, BYTE* sVersion);
+DWORD WINAPI LPU237_tools_msr_get_version( HANDLE hDev, BYTE *sVersion );
 
 /*!
 * function
@@ -610,11 +610,11 @@ DWORD WINAPI LPU237_tools_msr_get_version(HANDLE hDev, BYTE* sVersion);
 *	sVersion : [in] device firmware version( return value of LPU237_tools_msr_get_version() ).
 *			this value can be NULL(0).
 *
-* return
+* return 
 * 	if error, return LPU237_TOOLS_RESULT_ERROR
 *	else major version number.
 */
-DWORD WINAPI LPU237_tools_msr_get_version_major(const BYTE* sVersion);
+DWORD WINAPI LPU237_tools_msr_get_version_major( const BYTE *sVersion );
 
 /*!
 * function
@@ -624,11 +624,11 @@ DWORD WINAPI LPU237_tools_msr_get_version_major(const BYTE* sVersion);
 *	sVersion : [in] device firmware version( return value of LPU237_tools_msr_get_version() ).
 *			this value can be NULL(0).
 *
-* return
+* return 
 * 	if error, return LPU237_TOOLS_RESULT_ERROR
 *	else minor version number.
 */
-DWORD WINAPI LPU237_tools_msr_get_version_minor(const BYTE* sVersion);
+DWORD WINAPI LPU237_tools_msr_get_version_minor( const BYTE *sVersion );
 
 /*!
 * function
